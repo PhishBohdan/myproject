@@ -1,0 +1,438 @@
+{{define "body"}}
+<div class="clearfix"> </div>
+
+<div class="page-container">
+    
+    <!-- BEGIN SIDEBAR -->
+    <div class="page-sidebar-wrapper">
+        <div class="page-sidebar navbar-collapse collapse">
+            <!-- BEGIN SIDEBAR MENU -->
+            <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+                <li class="sidebar-toggler-wrapper hide">
+                    <div class="sidebar-toggler">
+                        <span></span>
+                    </div>
+                </li>
+                <li class="heading">
+                    <h3 class="uppercase">Menu</h3>
+                </li>
+                <li class="nav-item  start">
+                    <a href="/campaigns" class="nav-link">
+                        <i class="icon-diamond"></i>
+                        <span class="title">Campaigns</span>
+                    </a>
+                </li>
+                <li class="nav-item  ">
+                    <a href="/filteredcampaigns" class="nav-link nav-toggle">
+                        <i class="icon-puzzle"></i>
+                        <span class="title">Phishing Results</span>
+                    </a>
+                </li>
+                <li class="nav-item  ">
+                    <a href="/users" class="nav-link">
+                        <i class="icon-diamond"></i>
+                        <span class="title">Users &amp; Groups</span>
+                    </a>
+                </li>
+                <li class="nav-item  ">
+                    <a href="/templates" class="nav-link nav-toggle">
+                        <i class="icon-puzzle"></i>
+                        <span class="title">Email Templates</span>
+                    </a>
+                </li>
+                <li class="nav-item  ">
+                    <a href="/landing_pages" class="nav-link">
+                        <i class="icon-diamond"></i>
+                        <span class="title">Landing Pages</span>
+                    </a>
+                </li>
+                <li class="nav-item  ">
+                    <a href="/sending_profiles" class="nav-link nav-toggle">
+                        <i class="icon-puzzle"></i>
+                        <span class="title">Sending Profiles</span>
+                    </a>
+                </li>
+                <li class="nav-item  ">
+                    <a href="/settings" class="nav-link">
+                        <i class="icon-diamond"></i>
+                        <span class="title">Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item  ">
+                    <a href="/about" class="nav-link nav-toggle">
+                        <i class="icon-puzzle"></i>
+                        <span class="title">About</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- END SIDEBAR MENU -->
+            <!-- END SIDEBAR MENU -->
+        </div>
+        <!-- END SIDEBAR -->
+    </div>
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+
+        <!-- BEGIN CONTENT BODY -->
+        <div class="page-content">
+            <div id="loading">
+              <i class="fa fa-spinner fa-spin fa-4x"></i>
+            </div>
+            <!-- BEGIN PAGE HEADER-->
+            <!-- BEGIN THEME PANEL -->
+            <div class="theme-panel hidden-xs hidden-sm">
+                <div class="toggler"> </div>
+                <div class="toggler-close"> </div>
+                <div class="theme-options">
+                    <div class="theme-option theme-colors clearfix">
+                        <span> THEME COLOR </span>
+                        <ul>
+                            <li class="color-default current tooltips" data-style="default" data-container="body" data-original-title="Default"> </li>
+                            <li class="color-darkblue tooltips" data-style="darkblue" data-container="body" data-original-title="Dark Blue"> </li>
+                            <li class="color-blue tooltips" data-style="blue" data-container="body" data-original-title="Blue"> </li>
+                            <li class="color-grey tooltips" data-style="grey" data-container="body" data-original-title="Grey"> </li>
+                            <li class="color-light tooltips" data-style="light" data-container="body" data-original-title="Light"> </li>
+                            <li class="color-light2 tooltips" data-style="light2" data-container="body" data-html="true" data-original-title="Light 2"> </li>
+                        </ul>
+                    </div>
+                    <div class="theme-option">
+                        <span> Theme Style </span>
+                        <select class="layout-style-option form-control input-sm">
+                            <option value="square" selected="selected">Square corners</option>
+                            <option value="rounded">Rounded corners</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span> Layout </span>
+                        <select class="layout-option form-control input-sm">
+                            <option value="fluid" selected="selected">Fluid</option>
+                            <option value="boxed">Boxed</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span> Header </span>
+                        <select class="page-header-option form-control input-sm">
+                            <option value="fixed" selected="selected">Fixed</option>
+                            <option value="default">Default</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span> Top Menu Dropdown</span>
+                        <select class="page-header-top-dropdown-style-option form-control input-sm">
+                            <option value="light" selected="selected">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span> Sidebar Mode</span>
+                        <select class="sidebar-option form-control input-sm">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected="selected">Default</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span> Sidebar Style </span>
+                        <select class="sidebar-style-option form-control input-sm">
+                            <option value="default" selected="selected">Default</option>
+                            <option value="light">Light</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span> Sidebar Position </span>
+                        <select class="sidebar-pos-option form-control input-sm">
+                            <option value="left" selected="selected">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span> Footer </span>
+                        <select class="page-footer-option form-control input-sm">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected="selected">Default</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- END THEME PANEL -->
+            <div class="page-bar">
+                <ul class="page-breadcrumb">
+                    <li>
+                        <a href="index.html">Home</a>
+                        <i class="fa fa-circle"></i>
+                    </li>
+                    <li>
+                        <span>Campaigns</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="main">
+                <div class="row">
+                  <h1 class="page-header">Campaigns</h1>
+                </div>
+                <div id="flashes" class="row"></div>
+                <div class="tabbable-line boxless tabbable-reversed">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#tab_0" data-toggle="tab"> All Campaigns</a>
+                        </li>
+                        <li>
+                            <a href="#tab_1" data-toggle="tab" onclick="edit('new')"> New Campaign</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_0">
+                            <div class="row">
+                                <table id="campaignTable" class="table table-striped table-bordered table-hover dataTable" style="display:none;">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-3">Name</th>
+                                            <th class="col-md-4">Created Date</th>
+                                            <th class="col-md-2">Status</th>
+                                            <th class="col-md-3 no-sort"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="emptyMessage" class="row" style="display:none;">
+                                <div class="alert alert-info">
+                                    No campaigns created yet. Let's create one!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_1">
+                            <div class="row">
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Name</label>
+                                  <div class="col-md-9">
+                                    <div class="input-group bottom-15">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                      </span>
+                                      <input type="text" class="form-control"  id="name" placeholder="Campaign name" autofocus />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Email Template:</label>
+                                  <div class="col-md-9">
+                                    <div class="input-group bottom-15" >
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-envelope"></i>
+                                      </span>
+                                      <input type="text" class="typeahead form-control" placeholder="Template Name" id="template" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Landing Page:</label>
+                                  <div class="col-md-9">
+                                    <div class="input-group bottom-15">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-star"></i>
+                                      </span>
+                                      <input type="text" class="form-control typeahead" placeholder="Landing Page" id="page" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">URL: <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="right" title="Location of phishaway listener (must be reachable by targets!)"></i></label>
+                                  <div class="col-md-9">
+                                    <div class="input-group bottom-15">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-bell-o"></i>
+                                      </span>
+                                      <input type="text" class="form-control" placeholder="http://192.168.1.1" id="url" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Schedule: </label>
+                                  <div class="col-md-9">
+                                    <div class="input-group bottom-15">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                      </span>
+                                      <input type="text" class="form-control" id="launch_date" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Sending Profile: </label>
+                                  <div class="col-md-9">
+                                    <div class="input-group bottom-15">
+                                      <input type="text" class="typeahead form-control" placeholder="Sending Profile" id="profile" />
+                                      <span class="input-group-btn">
+                                          <button type="button" data-toggle="modal" data-target="#sendTestEmailModal" class="btn btn-primary typeahead-button">
+                                            <i class="fa fa-envelope"></i> Send Test Email</button>
+                                      </span>
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Groups: </label>
+                                  <div class="col-md-9">
+                                    <form id="groupForm">
+                                      <div class="input-group bottom-15">
+                                        <input type="text" class="form-control typeahead" placeholder="Group Name" id="groupSelect" />
+                                        <span class="input-group-btn">
+                                          <button class="btn btn-primary btn-md typeahead-button"><i class="fa fa-plus"></i> Add</button>
+                                        </span>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="portlet light bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-star"></i>Groups
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="table_wrapper">
+                                            <table id="groupTable" class="table table-hover datatable table-bordered table-striped table-condensed">
+                                                <thead>
+                                                    <th>Group Name</th>
+                                                    <th class="no-sort"> </th>
+                                                    <tbody>
+                                                    </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="actions">
+                                    <!--<button type="button" class="btn btn-default" data-dismiss="modal" onclick="dismiss()">Close</button> -->
+                                    <button type="button" id="launchButton" class="btn btn-primary" onclick="launch()"><i class="fa fa-rocket"></i> Launch Campaign</button>
+                                </div>
+                            </div>
+                            <!-- Modal -->
+                           <!--  <div class="modal fade top-100" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="dismiss()"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="campaignModalLabel">New Campaign</h4>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="dismiss()">Close</button>
+                                            <button type="button" id="launchButton" class="btn btn-primary" onclick="launch()"><i class="fa fa-rocket"></i> Launch Campaign</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <!-- Send Test Email Modal -->
+                            <div class="modal top-100" id="sendTestEmailModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <!-- New Email Modal -->
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="sendTestEmailModalTitle">Send Test Email</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row" id="sendTestEmailModal.flashes"></div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <label class="control-label" for="to">Send Test Email to:</label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                  <div class="form-group">
+                                                    <div class="input-group bottom-15">
+                                                      <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                      </span>
+                                                      <input type="text" class="form-control" placeholder="First Name" name="to_first_name">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                  <div class="form-group">
+                                                    <div class="input-group bottom-15">
+                                                      <span class="input-group-addon">
+                                                        <i class="fa fa-user"></i>
+                                                      </span>
+                                                      <input type="text" class="form-control" placeholder="Last Name" name="to_last_name">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                  <div class="form-group">
+                                                    <div class="input-group bottom-15">
+                                                      <span class="input-group-addon">
+                                                        <i class="fa fa-envelope"></i>
+                                                      </span>
+                                                      <input type="email" class="form-control" placeholder="Email" name="to_email" required>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                  <div class="form-group">
+                                                    <div class="input-group bottom-15">
+                                                      <span class="input-group-addon">
+                                                        <i class="fa fa-star"></i>
+                                                      </span>
+                                                      <input type="text" class="form-control" placeholder="Position" name="to_position">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                  <div class="form-group">
+                                                    <div class="input-group bottom-15">
+                                                      <span class="input-group-addon">
+                                                        <i class="fa fa-bank"></i>
+                                                      </span>
+                                                      <input type="text" class="form-control" placeholder="Department" name="to_department">
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
+                                            <button type="button" class="btn btn-primary" id="sendTestModalSubmit" onclick="sendTestEmail()"><i class="fa fa-envelope"></i> Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<div class="page-footer">
+    <div class="page-footer-inner"> 
+        <a target="_blank" class="page-footer-inner" href="http://phishaway.com">2017 © powered by secure.phishaway.com &nbsp;|&nbsp;</a> 
+        <a target="_blank" class="page-footer-inner" href="http://phishaway.com">Website:phishaway.com &nbsp;|&nbsp;</a> 
+        <a href="#" class="page-footer-inner" target="_blank">Business:nick.morgan@triskelelabs.com &nbsp;|&nbsp;</a> 
+        <a href="#" class="page-footer-inner" target="_blank">Technical:bjwbell@gmail.com  </a>
+
+    </div>
+    <div class="scroll-to-top" style="display: block;">
+        <i class="icon-arrow-up"></i>
+    </div>
+</div>
+
+{{end}}
+{{define "scripts"}}
+<script src="/js/bootstrap-datetime.js"></script>
+<script src="/js/hogan.js"></script>
+<script src="/js/typeahead.min.js"></script>
+<script src="/js/sweetalert2.min.js"></script>
+<script src="/js/app/campaigns.js"></script>
+{{end}}

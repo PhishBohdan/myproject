@@ -1,0 +1,62 @@
+{{define "body"}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/campaigns">Campaigns</a>
+                </li>
+                <li><a href="/filteredcampaigns">Phishing Results</a>
+                </li>
+                {{if .IsRestrictedUser}}
+                {{else}}
+                <li><a href="/users">Users &amp; Groups</a>
+                </li>
+                <li><a href="/templates">Email Templates</a>
+                </li>
+                <li><a href="/landing_pages">Landing Pages</a>
+                </li>
+                <li><a href="/sending_profiles">Sending Profiles</a>
+                </li>
+                {{end}}
+                <li><a href="/settings">Settings</a>
+                </li>
+                <li><a href="/about">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div id="target">
+        <div class="row">
+            <h1 class="page-header" id="page-title">{{.FirstName}} {{.LastName}} History</h1>
+        </div>
+        <b>Email</b> {{.Email}}
+        <br/>
+        <br/>
+        <div id="loading">
+            <i class="fa fa-spinner fa-spin fa-4x"></i>
+        </div>
+        <div style="display:none;" id="events-body">
+            <div id="events-overflow"></div>
+            <div class="row">
+                <table id="eventsTable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-1">Campaign</th>
+                            <th class="col-md-1">Time</th>
+                            <th class="col-md-1">Event</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="flashes" class="row"></div>
+</div>
+{{end}}
+{{define "scripts"}}
+<script src="/js/app/target.js"></script>
+{{end}}

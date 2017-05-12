@@ -1,0 +1,51 @@
+{{define "body"}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/campaigns">Campaigns</a>
+                </li>
+                <li><a href="/filteredcampaigns">Phishing Results</a>
+                </li>
+                <li><a href="/users">Users &amp; Groups</a>
+                </li>
+                <li><a href="/templates">Email Templates</a>
+                </li>
+                <li><a href="/landing_pages">Landing Pages</a>
+                </li>
+                <li><a href="/sending_profiles">Sending Profiles</a>
+                </li>
+                <li class="active"><a href="/settings">Settings</a>
+                </li>
+                <li><a href="/about">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="row">
+        <h1 class="page-header">Restricted Users</h1>
+    </div>
+    <div id="flashes" class="row"></div>
+    <br/>
+    {{range .RestrictedUsers}}
+        <div class="row">
+          <label class="col-sm-2 control-label form-label">Restricted User</label>
+          <div class="col-md-6">
+            <a href="/editrestricteduser?usernameid={{.Id}}" class="btn btn-primary"><i class="fa fa-plus"></i> {{.Username}}</a>
+          </div>
+        </div>
+    {{end}}
+    <div class="row">
+	    <label class="col-sm-2 control-label form-label">Add Restricted User</label>
+	    <div class="col-md-6">
+	        <a href="/addrestricteduser" class="btn btn-primary"><i class="fa fa-plus"></i> Add Restricted User</a>
+            </div>
+    </div>
+    <br/>
+</div>
+{{end}}
+{{define "scripts"}}
+<script src="/js/app/settings.js"></script>
+{{end}}

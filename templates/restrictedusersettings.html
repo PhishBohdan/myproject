@@ -1,0 +1,68 @@
+{{define "body"}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/campaigns">Campaigns</a>
+                </li>
+                <li><a href="/filteredcampaigns">Phishing Results</a>
+                </li>
+                <li class="active"><a href="/settings">Settings</a>
+                </li>
+                <li><a href="/about">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="row">
+        <h1 class="page-header">Settings</h1>
+    </div>
+    <div id="flashes" class="row"></div>
+    <div class="row">
+        <label class="col-sm-2 control-label form-label">Phishaway Version</label>
+        <div class="col-md-6">
+            <label class="form-label">{{.Version}}</label>
+        </div>
+    </div>
+    <br/>
+    <br />
+    <form id="settingsForm">
+        <div class="row">
+            <label for="username" class="col-sm-2 control-label form-label">Username/Email:</label>
+            <div class="col-md-6">
+                <input type="text" id="username" name="username" value="{{.RestrictedUser.Username}}" class="form-control" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <label for="current_password" class="col-sm-2 control-label form-label">Old Password:</label>
+            <div class="col-md-6">
+                <input type="password" id="current_password" name="current_password" class="form-control"/>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <label for="new_password" class="col-sm-2 control-label form-label">New Password:</label>
+            <div class="col-md-6">
+                <input type="password" id="new_password" name="new_password" class="form-control" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <label for="confirm_new_password" class="col-sm-2 control-label form-label">Confirm New Password:</label>
+            <div class="col-md-6">
+                <input type="password" id="confirm_new_password" name="confirm_new_password" class="form-control" />
+            </div>
+        </div>
+        <input type="hidden" name="csrf_token" value="{{.Token}}"/>
+        <br />
+	<button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
+    </form>
+    <br/>
+</div>
+{{end}}
+{{define "scripts"}}
+<script src="/js/app/settings.js"></script>
+{{end}}

@@ -1,0 +1,44 @@
+{{define "body"}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/campaigns">Campaigns</a>
+                </li>
+                <li><a href="/filteredcampaigns">Phishing Results</a>
+                </li>
+                <li><a href="/users">Users &amp; Groups</a>
+                </li>
+                <li><a href="/templates">Email Templates</a>
+                </li>
+                <li><a href="/landing_pages">Landing Pages</a>
+                </li>
+                <li><a href="/sending_profiles">Sending Profiles</a>
+                </li>
+                <li class="active"><a href="/settings">Settings</a>
+                </li>
+                <li><a href="/about">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="row">
+        <h1 class="page-header">Logo</h1>
+    </div>
+    <div id="flashes" class="row"></div>
+    <br/>
+    <br/>
+    <br/>
+    <form  id="uploadForm" action="/logo" method="POST" enctype="multipart/form-data">
+        Logo: <input type="file" name="logo"><br>
+        <input type="hidden" name="csrf_token" value="{{.Token}}"/>
+        <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i>Upload</button>
+     </form> 
+    <br/>
+</div>
+{{end}}
+{{define "scripts"}}
+<script src="/js/app/settings.js"></script>
+{{end}}

@@ -1,0 +1,63 @@
+{{define "body"}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/campaigns">Campaigns</a>
+                </li>
+                <li><a href="/filteredcampaigns">Phishing Results</a>
+                </li>
+                {{if .IsRestrictedUser}}
+                {{else}}
+                <li><a href="/users">Users &amp; Groups</a>
+                </li>
+                <li><a href="/templates">Email Templates</a>
+                </li>
+                <li><a href="/landing_pages">Landing Pages</a>
+                </li>
+                <li><a href="/sending_profiles">Sending Profiles</a>
+                </li>
+                {{end}}
+                <li><a href="/settings">Settings</a>
+                </li>
+                <li class="active"><a href="/about">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="row">
+        <h1 class="page-header">About</h1>
+    </div>
+    <div id="flashes" class="row"></div>
+    <div class="container-fluid">
+        <div class="two-column-left">
+            <div style="border:1px dotted black;border-radius:10px;padding:5px;margin:2px;">
+                <h6>Contact</h6>
+                <b>Website</b> <a href="http://phishaway.com">phishaway.com</a><br/>
+                <b>Business</b> nick.morgan@triskelelabs.com <br/>
+                <b>Technical</b> bjwbell@gmail.com <br/>
+            </div>
+        </div>
+        <div class="two-column-right" >
+            <div style="border:1px dotted black;border-radius:10px;padding:5px;margin:2px;">
+                <h6>Software Releases</h6>
+                <b>Released - 2017-03-08</b><br/>
+                <ul>
+                    <li>Clickable timeline <a href="https://github.com/bjwbell/phishaway/issues/13">#13</a></li>
+                    <li>User history page <a href="https://github.com/bjwbell/phishaway/issues/17">#17</a></li>
+                </ul>
+                <b>Next Release - 17.04</b>
+                <ul>
+                    <li>User password reset <a href="https://github.com/bjwbell/phishaway/issues/22">#22</a></li>
+                    <li>Upload excel files of targets/users <a href="https://github.com/bjwbell/phishaway/issues/22">#23</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br/>
+</div>
+{{end}}
+{{define "scripts"}}
+{{end}}

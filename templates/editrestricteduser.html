@@ -1,0 +1,101 @@
+{{ define "base" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.png">
+    <title>{{ .Title }} - Phishaway</title>
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
+    <link href="/css/flat-ui.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,700' rel='stylesheet' type='text/css'>
+
+    <script>
+    </script>
+
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img class="navbar-logo" src="/images/logo_inv_small.png" />
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <h4 class="form-signin-heading">Edit Restricted User</h4>
+    <div class="container-fluid">
+        {{template "flashes" .Flashes}}
+        <div class="two-column-left">
+            <div style="border:1px dotted black;border-radius:10px;padding:5px;margin:2px;">
+                <b>User</b> {{.RestrictedUser.Username}}
+                <div>
+                    <b>Campaigns:</b>
+                    <hr/>
+                    <ul>
+                        {{range .CampaignNames}}
+                        <li>{{.}}</li>
+                        {{end}}
+                    </ul>
+                </div>
+                <br>
+                <form style="border:1px dotted black;border-radius:10px;padding:5px;margin:2px;" action="/editrestricteduser?usernameid={{.RestrictedUser.Id}}" method="POST">
+                    <b>Add by campaign email domain</b><br/>
+                    <input type="text" name="campaignemaildomain" class="form-control" placeholder="gmail.com" autofocus/>
+                    <br/>
+                    <input type="hidden" name="csrf_token" value="{{.Token}}"/>
+                    <button class="btn btn-lg btn-primary" type="submit">Add by Email Domain</button>
+                </form>
+                <br/>
+                <form style="border:1px dotted black;border-radius:10px;padding:5px;margin:2px;" action="/editrestricteduser?usernameid={{.RestrictedUser.Id}}" method="POST">
+                    <b>Add by CampaignId</b><br/>
+                    <input type="text" name="campaignids" class="form-control top-input" placeholder="CampaignId1, CampaignId2" autofocus/>
+                    <br/>
+                    <input type="hidden" name="csrf_token" value="{{.Token}}"/>
+                    <button class="btn btn-lg btn-primary" type="submit">Add CampaignIDs</button>
+                </form>
+            </div>
+        </div>
+        <div class="two-column-right">
+            <form style="border:1px dotted black;border-radius:10px;padding:5px;margin:2px;" action="/editrestricteduser?usernameid={{.RestrictedUser.Id}}" method="POST">
+                <h6>Set Password</h6>
+                <div class="row">
+                    <label for="new_password" class="col-sm-3">New Password:</label>
+                    <div class="col-md-7">
+                        <input type="password" id="new_password" name="new_password" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="confirm_new_password" class="col-sm-3">Confirm New Password:</label>
+                    <div class="col-md-7">
+                        <input type="password" id="confirm_new_password" name="confirm_new_password" class="form-control" />
+                    </div>
+                </div>
+                <input type="hidden" name="csrf_token" value="{{.Token}}"/>
+                <br />
+                <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
+            </form>
+        </div>
+    </div>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/jquery.js"></script>
+</body>
+
+</html>
+{{ end }}

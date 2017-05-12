@@ -1,0 +1,80 @@
+{{define "body"}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/campaigns">Campaigns</a>
+                </li>
+                <li class="active"><a href="/filteredcampaigns">Phishing Results</a>
+                </li>
+                {{if .IsRestrictedUser}}
+                {{else}}
+                <li><a href="/users">Users &amp; Groups</a>
+                </li>
+                <li><a href="/templates">Email Templates</a>
+                </li>
+                <li><a href="/landing_pages">Landing Pages</a>
+                </li>
+                <li><a href="/sending_profiles">Sending Profiles</a>
+                </li>
+                {{end}}
+                <li><a href="/settings">Settings</a>
+                </li>
+                <li><a href="/about">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">    
+    <div id="campaign-results">
+        <div class="row">
+            <h1 class="page-header" id="page-title">Phishing Results</h1>
+        </div>
+        <form name="filterform" id="filterform" action="/filterresults" method="GET">
+            Campaign(s)
+            <input type="text" name="filter" id="filter" style="width:40%;"></input>
+            &nbsp;&nbsp;
+            <label for="statuses">Phishing Status:</label>
+            <select id="statuses" name="statuses" multiple>
+                 <option id="email-sent" name="email-sent" value="Email Sent">Sent</option>
+                 <option id="email-opened" name="email-opened" value="Email Opened">Opened</option>
+                 <option id="clicked-link" name="clicked-link" value="Clicked Link">Clicked Link</option>
+                 <option id="submitted-data" name="submitted-data" value="Submitted Data">Submitted Credentials</option>
+            </select>
+            <a class="btn btn-primary" href="#" onclick="submitSearchForm()">Search</a>
+        </form>
+        <br/>
+        <div id="loading">
+            <i class="fa fa-spinner fa-spin fa-4x"></i>
+        </div>
+        <div style="display:none;" id="results-body">
+            <div id="results-overflow"></div>
+            <div class="row">
+                <table id="resultsTable" class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">Campaign</th>
+                            <th class="col-md-3">Email</th>
+                            <th class="col-md-2">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="flashes" class="row"></div>
+</div>
+{{end}}
+{{define "scripts"}}
+<script src="/js/jquery.ui.widget.js"></script>
+<!-- d3, topojson, and datamaps for mapping -->
+<script src="/js/d3.min.js"></script>
+<script src="/js/topojson.min.js"></script>
+<script src="/js/datamaps.min.js"></script>
+<script src="/js/papaparse.min.js"></script>
+<script src="/js/sweetalert2.min.js"></script>
+<script src="/js/app/filterresults.js"></script>
+{{end}}
