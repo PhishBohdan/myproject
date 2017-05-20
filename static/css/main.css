@@ -127,7 +127,7 @@ li.two-column {
       width:100%;
   }
   p {
-      font-size:1.2em;
+      /*font-size:1.2em;*/
   }
 
   .form-label {
@@ -460,7 +460,7 @@ td.details-control{
 }
 .timeline-entry{
 	position:relative;
-	padding-bottom:36px;
+	padding-bottom:15px;
 }
 .timeline-bar {
 	display:block;

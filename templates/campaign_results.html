@@ -1,8 +1,9 @@
 {{define "body"}}
+<link rel="stylesheet" href="../assets/global/plugins/jquery.easyPaginate-master/jquery.paginate.css"/>
 <div class="clearfix"> </div>
 
 <div class="page-container">
-    
+
     <!-- BEGIN SIDEBAR -->
     <div class="page-sidebar-wrapper">
         <div class="page-sidebar navbar-collapse collapse">
@@ -77,7 +78,7 @@
         <!-- BEGIN CONTENT BODY -->
         <div class="page-content">
             <div id="loading">
-              <i class="fa fa-spinner fa-spin fa-4x"></i>
+                <i class="fa fa-spinner fa-spin fa-4x"></i>
             </div>
             <!-- BEGIN PAGE HEADER-->
             <!-- BEGIN THEME PANEL -->
@@ -169,96 +170,188 @@
             <div class="main">
                 <div style="display:none;" id="campaignResults">
                     <div class="row">
-                        <h1 class="page-header" id="page-title">Results for campaign.name</h1>
+                        <h1 class="page-title" id="page-title">Results for campaign.name</h1>
                     </div>
+                    
                     <div class="row">
-                        <a href="/campaigns" class="btn btn-default">
-                            <i class="fa fa-arrow-circle-o-left fa-lg"></i> Back
-                        </a>
-                    <div class="btn-group">
-                        <button type="button" id="exportButton" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i class="fa fa-file-excel-o"></i> Export CSV
-                        <i class="fa fa-caret-down"></i>
-                        </button>
-                    <ul class="dropdown-menu" aria-labelledby="exportButton">
-                        <li><a href="#" onclick="exportAsCSV('results')">Results</a></li>
-                        <li><a href="#" onclick="exportAsCSV('events')">Raw Events</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button type="button" id="exportButton" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <i class="fa fa-file-excel-o"></i> Export PDF
-                    <i class="fa fa-caret-down"></i>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="exportButton">
-                        <li><a href="#" onclick="exportAsPDF('results')">Results</a></li>
-                        <li><a href="#" onclick="exportAsPDF('events')">Raw Events</a></li>
-                    </ul>
-                </div>            
-                <button id="complete_button" type="button" class="btn btn-blue" data-toggle="tooltip" onclick="completeCampaign()">
-                    <i class="fa fa-flag-checkered"></i> Complete
-                </button>
-                <button type="button" class="btn btn-danger" data-toggle="tooltip" onclick="deleteCampaign()">
-                    <i class="fa fa-trash-o fa-lg"></i> Delete
-                </button>
-                <span id="refresh_message">
-                    <i class="fa fa-spin fa-spinner"></i> Refreshing
-                    </span>
-                </div>
-                <br />
-                    <div class="row">
+                        <div class="actions pull-right">
+                            <a href="/campaigns" class="btn btn-default btn-sm">
+                                <i class="fa fa-arrow-circle-o-left fa-lg"></i> Back
+                            </a>
+                            <div class="btn-group">
+                                <button type="button" id="exportButton" class="btn btn-outline btn-sm purple dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <i class="fa fa-file-excel-o"></i> Export CSV
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="exportButton">
+                                    <li><a href="#" onclick="exportAsCSV('results')">Results</a></li>
+                                    <li><a href="#" onclick="exportAsCSV('events')">Raw Events</a></li>
+                                </ul>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" id="exportButton" class="btn btn-sm btn-outline blue dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    <i class="fa fa-file-excel-o"></i> Export PDF
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="exportButton">
+                                    <li><a href="#" onclick="exportAsPDF('results')">Results</a></li>
+                                    <li><a href="#" onclick="exportAsPDF('events')">Raw Events</a></li>
+                                </ul>
+                            </div>
+                            <button id="complete_button" type="button" class="btn btn-sm btn-outline yellow" data-toggle="tooltip" onclick="completeCampaign()">
+                                <i class="fa fa-flag-checkered"></i> Complete
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline red" data-toggle="tooltip" onclick="deleteCampaign()">
+                                <i class="fa fa-trash-o fa-lg"></i> Delete
+                            </button>
+                            <span id="refresh_message">
+                                <i class="fa fa-spin fa-spinner"></i> Refreshing
+                            </span>
+                        </div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="active"><a href="#overview" aria-controls="home" role="tab" data-toggle="tab">Overview</a></li>
-                            <!--<li><a href="#plugins" aria-controls="profile" role="tab" data-toggle="tab">Plugins</a></li>
-                    <li><a href="#demographics" aria-controls="settings" role="tab" data-toggle="tab">Demographics</a></li>-->
+                            <li class="active">
+                                <a href="#overview" aria-controls="home" role="tab" data-toggle="tab">Overview</a>
+                            </li>
+                            <li class="">
+                                <a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a>
+                            </li>
                         </ul>
+
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="overview">
-                                <br/>
                                 <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <p style="text-align:center;">Campaign Timeline</p>
-                                        <br/>
-                                        <div id="timeline_chart"></div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <p style="text-align:center;">Email Status</p>
-                                        <div id="email_chart" class="col-lg-7 col-md-7"></div>
-                                        <div class="col-lg-5 col-md-5">
-                                            <ul id="email_chart_legend" class="chartist-legend">
-                                            </ul>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="portlet light portlet-fit bordered">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-directions font-green"></i>
+                                                    <span class="caption-subject bold font-dark uppercase "> Campaign Timeline(dd/mm/yy)</span>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="cd-horizontal-timeline mt-timeline-horizontal">
+                                                    <div class="timeline">
+                                                        <div class="events-wrapper">
+                                                            <div class="events">
+                                                                <ol id="timelinelists">
+                                                                    
+                                                                    
+                                                                </ol>
+                                                                <span class="filling-line bg-red" aria-hidden="true"></span>
+                                                            </div>
+                                                            <!-- .events -->
+                                                        </div>
+                                                        <!-- .events-wrapper -->
+                                                        <ul class="cd-timeline-navigation mt-ht-nav-icon">
+                                                            <li>
+                                                                <a href="#0" class="prev inactive btn btn-outline red md-skip">
+                                                                    <i class="fa fa-chevron-left"></i>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#0" class="next btn btn-outline red md-skip">
+                                                                    <i class="fa fa-chevron-right"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <!-- .cd-timeline-navigation -->
+                                                    </div>
+                                                    <!-- .timeline -->
+                                                    <div class="events-content">
+                                                        <ol id="event_lists">
+                                                            
+                                                        </ol>
+                                                    </div>
+                                                    <!-- .events-content -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="portlet light bordered">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="icon-cursor font-dark hide"></i>
+                                                            <span class="caption-subject font-dark bold uppercase">Campain Results</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <div class="easy-pie-chart">
+                                                                    <div class="number success" data-percent="55">
+                                                                        <span>+55</span></div>
+                                                                    <a class="title" href="javascript:;"> Success:<span id="success_msg"></span>
+                                                                        <i class="icon-arrow-right"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            
+
+                                                            <div class="margin-bottom-10 visible-sm"> </div>
+                                                            <div class="col-md-3">
+                                                                <div class="easy-pie-chart">
+                                                                    <div class="number opened" data-percent="85">
+                                                                        <span>+85</span> </div>
+                                                                    <a class="title" href="javascript:;"> Email Opened:<span id="open_msg"></span>
+
+                                                                        <i class="icon-arrow-right"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="margin-bottom-10 visible-sm"> </div>
+                                                            <div class="col-md-3">
+                                                                <div class="easy-pie-chart">
+                                                                    <div class="number clicked" data-percent="46">
+                                                                        <span>-46</span> </div>
+                                                                    <a class="title" href="javascript:;"> Clicked Link:<span id="click_msg"></span>
+                                                                        <i class="icon-arrow-right"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="easy-pie-chart">
+                                                                    <div class="number sent" data-percent="55">
+                                                                        <span>+55</span> </div>
+                                                                    <a class="title" href="javascript:;"> Email Sent:<span id="sent_msg"></span>
+                                                                        <i class="icon-arrow-right"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                    <!--
-                            <div role="tabpanel" class="tab-pane" id="plugins">
+                            <div role="tabpanel" class="tab-pane" id="details">
+                                
+                                <div class="">
+                                    <h2>Details</h2>
+                                    <table id="resultsTable" class="table table-bordered table-hovered">
+                                        <thead>
+                                            <tr>
+                                                <th>Result ID</th>
+                                                <th class="no-sort"></th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Email</th>
+                                                <th>Position</th>
+                                                <th>Department</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="demographics">
-                                Demographics here
-                            </div> -->
                         </div>
                     </div>
-                    <div class="row">
-                        <h2>Details</h2>
-                        <table id="resultsTable" class="table">
-                            <thead>
-                                <tr>
-                                    <th>Result ID</th>
-                                    <th class="no-sort"></th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Email</th>
-                                    <th>Position</th>
-                                    <th>Department</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
+
                 <div id="flashes" class="row"></div>
             </div>
         </div>
@@ -267,10 +360,10 @@
     <!-- END CONTENT -->
 </div>
 <div class="page-footer">
-    <div class="page-footer-inner"> 
-        <a target="_blank" class="page-footer-inner" href="http://phishaway.com">2017 © powered by secure.phishaway.com &nbsp;|&nbsp;</a> 
-        <a target="_blank" class="page-footer-inner" href="http://phishaway.com">Website:phishaway.com &nbsp;|&nbsp;</a> 
-        <a href="#" class="page-footer-inner" target="_blank">Business:nick.morgan@triskelelabs.com &nbsp;|&nbsp;</a> 
+    <div class="page-footer-inner">
+        <a target="_blank" class="page-footer-inner" href="http://phishaway.com">2017 © powered by secure.phishaway.com &nbsp;|&nbsp;</a>
+        <a target="_blank" class="page-footer-inner" href="http://phishaway.com">Website:phishaway.com &nbsp;|&nbsp;</a>
+        <a href="#" class="page-footer-inner" target="_blank">Business:nick.morgan@triskelelabs.com &nbsp;|&nbsp;</a>
         <a href="#" class="page-footer-inner" target="_blank">Technical:bjwbell@gmail.com  </a>
 
     </div>
@@ -279,8 +372,7 @@
     </div>
 </div>
 
-{{end}}
-{{define "scripts"}}
+{{end}} {{define "scripts"}}
 <script src="/js/jquery.ui.widget.js"></script>
 <!-- d3, topojson, and datamaps for mapping -->
 <script src="/js/d3.min.js"></script>
@@ -288,5 +380,12 @@
 <script src="/js/datamaps.min.js"></script>
 <script src="/js/papaparse.min.js"></script>
 <script src="/js/sweetalert2.min.js"></script>
+<!-- BEGIN PAGE LEVEL PLUGINS --><!--script by star-->
+<script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="../assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js"></script>
+<!-- END PAGE LEVEL PLUGINS -->
 <script src="/js/app/campaign_results.js"></script>
+
+
+
 {{end}}

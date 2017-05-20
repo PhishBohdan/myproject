@@ -1,4 +1,4 @@
-// labels is a map of campaign statuses to
+    // labels is a map of campaign statuses to
 // CSS classes
 var labels = {
     "In progress": "label-primary",
@@ -283,7 +283,7 @@ $(document).ready(function() {
             },
             "showTodayButton": true,
             "defaultDate": moment()
-        })
+    })
         // Setup multiple modals
         // Code based on http://miles-by-motorcycle.com/static/bootstrap-modal/index.html
     $('.modal').on('hidden.bs.modal', function(event) {
@@ -327,6 +327,7 @@ $(document).ready(function() {
     var initialLimit = 20;
     api.campaignslimit.get(initialLimit)
         .success(function(cs) {
+            console.log(cs);
             campaigns = cs
             $("#loading").hide()
             if (campaigns.length > 0) {

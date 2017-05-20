@@ -263,6 +263,7 @@ function load(filter, matchExact) {
             // createUniqueCredsPieChart(summaryStats);
             updateSummaryStats(summaryStats);
             barChart(summaryStats );
+            Chart.initAmChart1(summaryStats);
             pieChart(summaryStats);
             $("#loading").hide()
             $("#campaign-results-body").show();
@@ -287,140 +288,213 @@ function load(filter, matchExact) {
 function pieChart(summaryStats){
     var totals = getSummaryTotals(summaryStats);
     console.log(totals['error_sending']);
-    var chart = AmCharts.makeChart( "sentpiechart", {
-        "type": "pie",
-        "theme": "none",
-        "titles": [ {
-            "text": "Emails Sent",
-            "size": 16
-        } ],
-        "dataProvider": [ {
-        "status": "Email Sent",
-        "color":"#0D8ECF",
-        "value": totals['sent']
-        }, 
-        {
-        "status": "Error sending",
-        "color":"#FF9E01",
-        "value": totals['error_sending']
-        }
-
-      ],
-      "valueField": "value",
-      "colorField": "color",
-      "titleField": "status",
-      "labelText": "[[title]]: [[value]]",
-      "outlineAlpha": 0.4,
-      "innerRadius": "50%",
-      "labelRadius": 25,
-      "depth3D": 15,
-      "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> </span>",
-      "angle": 30,
-      "export": {
+    var gaugeChart = AmCharts.makeChart("sentpiechart", {
+        "type": "gauge",
+        "theme": "light",
+        "axes": [{
+        "axisAlpha": 0,
+        "tickAlpha": 0,
+        "labelsEnabled": false,
+        "startValue": 0,
+        "endValue": totals['sent'],
+        "startAngle": 0,
+        "endAngle": 270,
+        "bands": [{
+          "color": "#eee",
+          "startValue": 0,
+          "endValue": 100,
+          "radius": "100%",
+          "innerRadius": "85%"
+        }, {
+          "color": "#67b7dc",
+          "startValue": 0,
+          "endValue": totals['sent'],
+          "radius": "100%",
+          "innerRadius": "85%",
+          "balloonText": totals['sent']
+        }, {
+          "color": "#eee",
+          "startValue": 0,
+          "endValue": 100,
+          "radius": "80%",
+          "innerRadius": "65%"
+        }, {
+          "color": "#fdd400",
+          "startValue": 0,
+          "endValue": totals['opened'],
+          "radius": "80%",
+          "innerRadius": "65%",
+          "balloonText": totals['opened']
+        }, {
+          "color": "#eee",
+          "startValue": 0,
+          "endValue": 100,
+          "radius": "60%",
+          "innerRadius": "45%"
+        }, {
+          "color": "#f36a5a",
+          "startValue": 0,
+          "endValue": totals['clicked'],
+          "radius": "60%",
+          "innerRadius": "45%",
+          "balloonText": totals['clicked']
+        }, {
+          "color": "#eee",
+          "startValue": 0,
+          "endValue": 100,
+          "radius": "40%",
+          "innerRadius": "25%"
+        }, {
+          "color": "#8E44AD ",
+          "startValue": 0,
+          "endValue": totals['unique-credentials'],
+          "radius": "40%",
+          "innerRadius": "25%",
+          "balloonText": totals['unique-credentials']
+        }]
+        }],
+        "allLabels": [{
+        "text": "Email Sent",
+        "x": "49%",
+        "y": "5%",
+        "size": 15,
+        "bold": true,
+        "color": "#67b7dc",
+        "align": "right"
+        }, {
+        "text": "Email Opened",
+        "x": "49%",
+        "y": "15%",
+        "size": 15,
+        "bold": true,
+        "color": "#fdd400",
+        "align": "right"
+        }, {
+        "text": "Clicked Links",
+        "x": "49%",
+        "y": "24%",
+        "size": 15,
+        "bold": true,
+        "color": "#f36a5a",
+        "align": "right"
+        }, {
+        "text": "Credentials Entered",
+        "x": "49%",
+        "y": "33%",
+        "size": 15,
+        "bold": true,
+        "color": "#8E44AD ",
+        "align": "right"
+        }],
+        "export": {
         "enabled": true
-      }
-    } );
-    var chart = AmCharts.makeChart( "openpiechart", {
-        "type": "pie",
-        "theme": "none",
-        "titles": [ {
-            "text": "Emails Opened",
-            "size": 16
-        } ],
-        "dataProvider": [ {
-        "status": "Opened",
-        "color":"#FF9E01",
-        "value": totals['opened']
-        }, 
-        {
-        "status": "Unopened",
-        "color":"#0D8ECF",
-        "value": totals['sent'] - totals['opened']
         }
-
-      ],
-      "valueField": "value",
-      "titleField": "status",
-      "outlineAlpha": 0.4,
-      "colorField": "color",
-      "labelText": "[[title]]: [[value]]",
-      "labelRadius": 25,
-      "innerRadius": "50%",
-      "depth3D": 15,
-      "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> </span>",
-      "angle": 30,
-      "export": {
+    });
+    var maxval = Math.max(totals['error_sending'],(totals['sent'] - totals['clicked']), (totals['sent'] - totals['opened']), (totals['sent'] - totals['unique-credentials']) )
+    var gaugChart = AmCharts.makeChart("openpiechart", {
+        "type": "gauge",
+        "theme": "light",
+        "axes": [{
+        "axisAlpha": 0,
+        "tickAlpha": 0,
+        "labelsEnabled": false,
+        "startValue": 0,
+        "endValue": maxval,
+        "startAngle": 0,
+        "endAngle": 270,
+        "bands": [{
+          "color": "#eee",
+          "startValue": 0,
+          "endValue": 100,
+          "radius": "100%",
+          "innerRadius": "85%"
+        }, {
+          "color": "#67b7dc",
+          "startValue": 0,
+          "endValue": (totals['sent'] - totals['unique-credentials']),
+          "radius": "100%",
+          "innerRadius": "85%",
+          "balloonText": (totals['sent'] - totals['unique-credentials'])
+        }, {
+          "color": "#eee",
+          "startValue": 0,
+          "endValue": 100,
+          "radius": "80%",
+          "innerRadius": "65%"
+        }, {
+          "color": "#fdd400",
+          "startValue": 0,
+          "endValue": (totals['sent'] - totals['clicked']),
+          "radius": "80%",
+          "innerRadius": "65%",
+          "balloonText": (totals['sent'] - totals['clicked'])
+        }, {
+          "color": "#eee",
+          "startValue": 0,
+          "endValue": 100,
+          "radius": "60%",
+          "innerRadius": "45%"
+        }, {
+          "color": "#f36a5a",
+          "startValue": 0,
+          "endValue": (totals['sent'] - totals['opened']),
+          "radius": "60%",
+          "innerRadius": "45%",
+          "balloonText": (totals['sent'] - totals['opened'])
+        }, {
+          "color": "#eee",
+          "startValue": 0,
+          "endValue": 100,
+          "radius": "40%",
+          "innerRadius": "25%"
+        }, {
+          "color": "#8E44AD ",
+          "startValue": 0,
+          "endValue": totals['error_sending'],
+          "radius": "40%",
+          "innerRadius": "25%",
+          "balloonText": totals['error_sending']
+        }]
+        }],
+        "allLabels": [{
+        "text": "No Credentials",
+        "x": "49%",
+        "y": "5%",
+        "size": 15,
+        "bold": true,
+        "color": "#67b7dc",
+        "align": "right"
+        }, {
+        "text": "Didn't Click",
+        "x": "49%",
+        "y": "15%",
+        "size": 15,
+        "bold": true,
+        "color": "#fdd400",
+        "align": "right"
+        }, {
+        "text": "Unopened   ",
+        "x": "49%",
+        "y": "24%",
+        "size": 15,
+        "bold": true,
+        "color": "#f36a5a",
+        "align": "right"
+        }, {
+        "text": "Error Sending",
+        "x": "49%",
+        "y": "33%",
+        "size": 15,
+        "bold": true,
+        "color": "#8E44AD",
+        "align": "right"
+        }],
+        "export": {
         "enabled": true
-      }
-    } );
-    var chart = AmCharts.makeChart( "linkpiechart", {
-        "type": "pie",
-        "theme": "none",
-        "titles": [ {
-            "text": "Links Clicked",
-            "size": 16
-        } ],
-        "dataProvider": [ {
-        "status": "Clicked",
-        "color":"#FF9E01",
-        "value": totals['clicked']
-        }, 
-        {
-        "status": "Didn't clicked",
-        "color":"#0D8ECF",
-        "value": totals['sent'] - totals['clicked']
         }
+    });
 
-      ],
-      "valueField": "value",
-      "titleField": "status",
-      "outlineAlpha": 0.4,
-      "labelText": "[[title]]: [[value]]",
-      "innerRadius": "50%",
-      "colorField": "color",
-      "labelRadius": 25,
-      "depth3D": 15,
-      "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> </span>",
-      "angle": 30,
-      "export": {
-        "enabled": true
-      }
-    } );
-    var chart = AmCharts.makeChart( "credentialpiechart", {
-        "type": "pie",
-        "theme": "none",
-        "titles": [ {
-            "text": "Credentials Entered",
-            "size": 16
-        } ],
-        "dataProvider": [ {
-        "status": "Credentials Entered",
-        "color":"#0D8ECF",
-        "value": totals['unique-credentials']
-        }, 
-        {
-        "status": "No Credentials",
-        "color":"#FF9E01",
-        "value": totals['sent'] - totals['unique-credentials']
-        }
-
-      ],
-      "valueField": "value",
-      "titleField": "status",
-      "outlineAlpha": 0.4,
-      "colorField": "color",
-      "labelRadius": 25,
-      "labelText": "[[title]]: [[value]]",
-      "innerRadius": "50%",
-      "depth3D": 15,
-      "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> </span>",
-      "angle": 30,
-      "export": {
-        "enabled": true
-      }
-    } );
-
-}
+   }
 function barChart(summaryStats){
     var totals = getSummaryTotals(summaryStats);
     
@@ -545,7 +619,6 @@ function populateNamesTable(summaryStats) {
         campaignTable.draw();
     }
 }
-
 function createEmailsOpenedPieChart(summaryStats) {
     var email_opts = {
         donut: true,
@@ -593,7 +666,6 @@ function createEmailsOpenedPieChart(summaryStats) {
         });
     });
 }
-
 function createEmailsClickedPieChart(summaryStats) {
     var opts = {
         donut: true,
@@ -773,3 +845,163 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+var Chart = {
+    initAmChart1: function(summaryStats) {
+    if (typeof(AmCharts) === 'undefined' || $('#dashboard_amchart_1').size() === 0) {
+        return;
+    }
+    var totals = getSummaryTotals(summaryStats);
+    var chartData = [{
+        "status": "Email Sent",
+        "numbers": totals['sent'],
+        "townSize": 7,
+        "activityPercent": Number((totals['sent']/totals['sent'])*100).toFixed(2),
+    }, {
+        "status": "Error Sending",
+        "numbers": totals['error_sending'],
+        "NotActivityPercent": Number((totals['error_sending']/totals['sent'])*100).toFixed(2)
+    }, {
+        "status": "Emails Opened",
+        "numbers": totals['opened'],
+        "townSize": 16,
+        "activityPercent": Number((totals['opened']/totals['sent'])*100).toFixed(2),
+    }, {
+        "status": "Unopened",
+        "numbers": totals['sent'] - totals['opened'],
+        "NotActivityPercent": Number(((totals['sent'] - totals['opened'])/totals['sent'])*100).toFixed(2)
+    }, {
+        "status": "Links Clicked",
+        "numbers": totals['clicked'],
+        "townSize": 11,
+        "activityPercent": Number((totals['clicked']/totals['sent'])*100).toFixed(2),
+    }, {
+        "status": "Didn't Click",
+        "numbers":  totals['sent'] - totals['clicked'],
+        "NotActivityPercent": Number(((totals['sent'] - totals['clicked'])/totals['sent'])*100).toFixed(2)
+    }, {
+        "status": "Credentials Entered",
+        "numbers": totals['unique-credentials'],
+        "townSize": 18,
+        "activityPercent": Number((totals['unique-credentials']/totals['sent'])*100).toFixed(2),
+        "townName": "Credentials Entered",
+        "townName2": "Credentials Entered",
+        "bulletClass": "lastBullet"
+    }, {
+        "status": "No Credentials",
+        "numbers": totals['sent'] -  totals['unique-credentials'],
+        "NotActivityPercent": Number(((totals['sent'] - totals['unique-credentials'])/totals['sent'])*100).toFixed(2),
+        "alpha": 0.4,
+        
+    }, {
+        "status": " "
+    }];
+    var chart = AmCharts.makeChart("dashboard_amchart_1", {
+        type: "serial",
+        fontSize: 12,
+        fontFamily: "Open Sans",
+        dataDateFormat: "YYYY-MM-DD",
+        dataProvider: chartData,
+
+        addClassNames: true,
+        startDuration: 1,
+        color: "#6c7b88",
+        marginLeft: 0,
+
+        categoryField: "status",
+        categoryAxis: {
+            minPeriod: "DD",
+            autoGridCount: false,
+            gridCount: 50,
+            gridAlpha: 0.1,
+            gridColor: "#FFFFFF",
+            axisColor: "#555555",
+        },
+        valueAxes: [{
+            id: "a1",
+            title: "numbers",
+            gridAlpha: 0,
+            axisAlpha: 0
+        }, {
+            id: "a2",
+            position: "right",
+            gridAlpha: 0,
+            axisAlpha: 0,
+            labelsEnabled: false
+        }, {
+            id: "a3",
+            title: "NotActivityPercent",
+            position: "right",
+            gridAlpha: 0,
+            axisAlpha: 0,
+            inside: true,
+            NotActivityPercent: "%",
+        }],
+        graphs: [{
+            id: "g1",
+            valueField: "numbers",
+            title: "number",
+            type: "column",
+            fillAlphas: 0.7,
+            valueAxis: "a1",
+            balloonText: "[[value]]",
+            legendValueText: "[[value]]",
+            legendPeriodValueText: "total: [[value.sum]]",
+            lineColor: "#08a3cc",
+            alphaField: "alpha",
+        }, {
+            id: "g2",
+            valueField: "activityPercent",
+            classNameField: "bulletClass",
+            title: "activityPercent",
+            type: "line",
+            valueAxis: "a2",
+            lineColor: "#786c56",
+            lineThickness: 1,
+            legendValueText: "[[description]]/[[value]]",
+            bullet: "round",
+            bulletSizeField: "townSize",
+            bulletBorderColor: "#02617a",
+            bulletBorderAlpha: 1,
+            bulletBorderThickness: 2,
+            bulletColor: "#89c4f4",
+            labelText: "[[townName2]]",
+            labelPosition: "right",
+            balloonText: "activityPercent:[[value]]%",
+            showBalloon: true,
+            animationPlayed: true,
+        }, {
+            id: "g3",
+            title: "NotActivityPercent",
+            valueField: "NotActivityPercent",
+            type: "line",
+            valueAxis: "a3",
+            lineAlpha: 0.8,
+            lineColor: "#e26a6a",
+            balloonText: "[[value]]%",
+            lineThickness: 1,
+            legendValueText: "[[value]]",
+            bullet: "square",
+            bulletBorderColor: "#e26a6a",
+            bulletBorderThickness: 1,
+            bulletBorderAlpha: 0.8,
+            dashLengthField: "dashLength",
+            animationPlayed: true
+        }],
+
+        chartCursor: {
+            zoomable: false,
+            cursorAlpha: 0,
+            categoryBalloonColor: "#e26a6a",
+            categoryBalloonAlpha: 0.8,
+            valueBalloonsEnabled: false
+        },
+        legend: {
+            bulletType: "round",
+            equalWidths: false,
+            valueWidth: 120,
+            useGraphSettings: true,
+            color: "#6c7b88"
+        }
+    });
+    }
+}        
