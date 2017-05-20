@@ -290,6 +290,7 @@ function pieChart(summaryStats){
     console.log(totals['error_sending']);
     var gaugeChart = AmCharts.makeChart("sentpiechart", {
         "type": "gauge",
+        "fontFamily": "Open Sans",
         "theme": "light",
         "axes": [{
         "axisAlpha": 0,
@@ -357,32 +358,32 @@ function pieChart(summaryStats){
         "text": "Email Sent",
         "x": "49%",
         "y": "5%",
-        "size": 15,
-        "bold": true,
+        "size": 13,
+        "bold": false,
         "color": "#67b7dc",
         "align": "right"
         }, {
         "text": "Email Opened",
         "x": "49%",
         "y": "15%",
-        "size": 15,
-        "bold": true,
+        "size": 13,
+        "bold": false,
         "color": "#fdd400",
         "align": "right"
         }, {
         "text": "Clicked Links",
         "x": "49%",
         "y": "24%",
-        "size": 15,
-        "bold": true,
+        "size": 13,
+        "bold": false,
         "color": "#f36a5a",
         "align": "right"
         }, {
         "text": "Credentials Entered",
         "x": "49%",
         "y": "33%",
-        "size": 15,
-        "bold": true,
+        "size": 13,
+        "bold": false,
         "color": "#8E44AD ",
         "align": "right"
         }],
@@ -393,6 +394,7 @@ function pieChart(summaryStats){
     var maxval = Math.max(totals['error_sending'],(totals['sent'] - totals['clicked']), (totals['sent'] - totals['opened']), (totals['sent'] - totals['unique-credentials']) )
     var gaugChart = AmCharts.makeChart("openpiechart", {
         "type": "gauge",
+        "fontFamily": "Open Sans",
         "theme": "light",
         "axes": [{
         "axisAlpha": 0,
@@ -460,32 +462,32 @@ function pieChart(summaryStats){
         "text": "No Credentials",
         "x": "49%",
         "y": "5%",
-        "size": 15,
-        "bold": true,
+        "size": 13,
+        "bold": false,
         "color": "#67b7dc",
         "align": "right"
         }, {
         "text": "Didn't Click",
         "x": "49%",
         "y": "15%",
-        "size": 15,
-        "bold": true,
+        "size": 13,
+        "bold": false,
         "color": "#fdd400",
         "align": "right"
         }, {
         "text": "Unopened   ",
         "x": "49%",
         "y": "24%",
-        "size": 15,
-        "bold": true,
+        "size": 13,
+        "bold": false,
         "color": "#f36a5a",
         "align": "right"
         }, {
         "text": "Error Sending",
         "x": "49%",
         "y": "33%",
-        "size": 15,
-        "bold": true,
+        "size": 13,
+        "bold": false,
         "color": "#8E44AD",
         "align": "right"
         }],
