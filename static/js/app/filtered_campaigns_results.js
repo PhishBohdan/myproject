@@ -257,14 +257,14 @@ function load(filter, matchExact) {
     $("#loading").show();
     api.campaignssummarystats.get(filter, matchExact)
         .success(function(summaryStats) {
-            // createEmailsSentPieChart(summaryStats);
-            // createEmailsOpenedPieChart(summaryStats);
-            // createEmailsClickedPieChart(summaryStats);
-            // createUniqueCredsPieChart(summaryStats);
+            createEmailsSentPieChart(summaryStats);
+            createEmailsOpenedPieChart(summaryStats);
+            createEmailsClickedPieChart(summaryStats);
+            createUniqueCredsPieChart(summaryStats);
             updateSummaryStats(summaryStats);
             barChart(summaryStats );
             Chart.initAmChart1(summaryStats);
-            pieChart(summaryStats);
+            // pieChart(summaryStats);
             $("#loading").hide()
             $("#campaign-results-body").show();
             populateNamesTable(summaryStats);
@@ -622,193 +622,222 @@ function populateNamesTable(summaryStats) {
     }
 }
 function createEmailsOpenedPieChart(summaryStats) {
-    var email_opts = {
-        donut: true,
-        donutWidth: 50,
-        chartPadding: 0,
-        showLabel: true
-    };
     var totals = getSummaryTotals(summaryStats);
-    var email_data = {
-        series: [{meta: 'Opened', slice: 'ct-slice-donut-opened', legend: 'ct-legend-opened', value:totals['opened']}, {meta: 'Unopened', slice: 'ct-slice-donut-sent', legend: "ct-legend-sent", value:totals['sent'] - totals['opened']}]
-    };
-    $("#email_chart_legend").html("")
-    $.each(email_data['series'], function(idx) {
-        var legend = email_data['series'][idx]['legend'];
-        var meta = email_data['series'][idx]['meta'];
-        $("#email_chart_legend").append('<li><span class="' + legend + '"></span><br/>' + meta + '</li>')
-    })
-    var email_chart = new Chartist.Pie("#email_chart", email_data, email_opts)
-    email_chart.on('draw', function(data) {
-        if (data.meta !== undefined) {
-            data.element.addClass(statuses[data.meta].slice);
-        }
-    })
-    // Setup the average chart listeners
-    $piechart = $("#email_chart")
-    var $pietoolTip = $piechart
-        .append('<div class="chartist-tooltip"></div>')
-        .find('.chartist-tooltip')
-        .hide();
-
-    $piechart.on('mouseenter', '.ct-slice-donut', function() {
-        var $point = $(this)
-        value = $point.attr('ct:value')
-        label = $point.attr('ct:meta')
-        $pietoolTip.html(label + ': ' + value.toString()).show();
-    });
-
-    $piechart.on('mouseleave', '.ct-slice-donut', function() {
-        $pietoolTip.hide();
-    });
-    $piechart.on('mousemove', function(event) {
-        $pietoolTip.css({
-            left: (event.offsetX || event.originalEvent.layerX) - $pietoolTip.width() / 2 - 10,
-            top: (event.offsetY + 40 || event.originalEvent.layerY) - $pietoolTip.height() - 80
-        });
+    var chart = AmCharts.makeChart("openpiechart", {
+      "type": "pie",
+      "startDuration": 0,
+      "theme": "light",
+      "addClassNames": true,
+      "legend":{
+        "position":"bottom",
+        "align":"center",
+        "autoMargins":false
+      },
+      "innerRadius": "30%",
+      "defs": {
+        "filter": [{
+          "id": "shadow",
+          "width": "200%",
+          "height": "200%",
+          "feOffset": {
+            "result": "offOut",
+            "in": "SourceAlpha",
+            "dx": 0,
+            "dy": 0
+          },
+          "feGaussianBlur": {
+            "result": "blurOut",
+            "in": "offOut",
+            "stdDeviation": 5
+          },
+          "feBlend": {
+            "in": "SourceGraphic",
+            "in2": "blurOut",
+            "mode": "normal"
+          }
+        }]
+      },
+      "dataProvider": [{
+        "status": "Email Opened",
+        "litres": totals['opened'],
+        "color": "#fdd400"
+      }, {
+        "status": "Unopened",
+        "litres": totals['sent']-totals['opened'],
+        "color": "#67b7dc"
+      }],
+      "valueField": "litres",
+      "titleField": "status",
+      "colorField": "color",
+      "labelsEnabled": false,
+      "export": {
+        "enabled": true
+    }
     });
 }
 function createEmailsClickedPieChart(summaryStats) {
-    var opts = {
-        donut: true,
-        donutWidth: 50,
-        chartPadding: 0,
-        showLabel: true
-    };
     var totals = getSummaryTotals(summaryStats);
-    var data = {
-        series: [{meta: 'Clicked', slice: 'ct-slice-donut-clicked', legend: 'ct-legend-clicked', value:totals['clicked']}, {meta: "Didn't Click", slice: 'ct-slice-donut-sent', legend: "ct-legend-sent", value:totals['sent'] - totals['clicked']}]
-    };
-    $("#email_clicked_chart_legend").html("")
-    $.each(data['series'], function(idx) {
-        var legend = data['series'][idx]['legend'];
-        var meta = data['series'][idx]['meta'];
-        $("#email_clicked_chart_legend").append('<li><span class="' + legend + '"></span><br/>' + meta + '</li>')
-    })
-    var email_clicked_chart = new Chartist.Pie("#email_clicked_chart", data, opts)
-    email_clicked_chart.on('draw', function(data) {
-        if (data.meta !== undefined) {
-            data.element.addClass(statuses[data.meta].slice);
-        }
-    })
-    // Setup the average chart listeners
-    $piechart = $("#email_clicked_chart")
-    var $pietoolTip = $piechart
-        .append('<div class="chartist-tooltip"></div>')
-        .find('.chartist-tooltip')
-        .hide();
-
-    $piechart.on('mouseenter', '.ct-slice-donut', function() {
-        var $point = $(this)
-        value = $point.attr('ct:value')
-        label = $point.attr('ct:meta')
-        $pietoolTip.html(label + ': ' + value.toString()).show();
-    });
-
-    $piechart.on('mouseleave', '.ct-slice-donut', function() {
-        $pietoolTip.hide();
-    });
-    $piechart.on('mousemove', function(event) {
-        $pietoolTip.css({
-            left: (event.offsetX || event.originalEvent.layerX) - $pietoolTip.width() / 2 - 10,
-            top: (event.offsetY + 40 || event.originalEvent.layerY) - $pietoolTip.height() - 80
-        });
+    var chart = AmCharts.makeChart("clickpiechart", {
+      "type": "pie",
+      "startDuration": 0,
+       "theme": "light",
+      "addClassNames": true,
+      "legend":{
+        "position":"bottom",
+        "align":"center",
+        "autoMargins":false
+      },
+      "innerRadius": "30%",
+      "defs": {
+        "filter": [{
+          "id": "shadow",
+          "width": "200%",
+          "height": "200%",
+          "feOffset": {
+            "result": "offOut",
+            "in": "SourceAlpha",
+            "dx": 0,
+            "dy": 0
+          },
+          "feGaussianBlur": {
+            "result": "blurOut",
+            "in": "offOut",
+            "stdDeviation": 5
+          },
+          "feBlend": {
+            "in": "SourceGraphic",
+            "in2": "blurOut",
+            "mode": "normal"
+          }
+        }]
+      },
+      "dataProvider": [{
+        "status": "Links Clicked",
+        "litres": totals['clicked'],
+        "color": "#fdd400"
+      }, {
+        "status": "Didn't Clicked",
+        "litres": totals['sent']-totals['clicked'],
+        "color": "#67b7dc"
+      }],
+      "valueField": "litres",
+      "titleField": "status",
+      "colorField": "color",
+      "labelsEnabled": false,
+      "export": {
+        "enabled": true
+    }
     });
 }
 
 function createEmailsSentPieChart(summaryStats) {
-    var opts = {
-        donut: true,
-        donutWidth: 50,
-        chartPadding: 0,
-        showLabel: true
-    };
     var totals = getSummaryTotals(summaryStats);
-    var data = {
-        series: [{meta: 'Email Sent', slice: 'ct-slice-donut-sent', legend: 'ct-legend-sent', value:totals['sent']}, {meta: "Error Sending", slice: 'ct-slice-donut-opened', legend: "ct-legend-opened", value:totals['error_sending']}]
-    };
-    $("#email_sent_chart_legend").html("")
-    $.each(data['series'], function(idx) {
-        var legend = data['series'][idx]['legend'];
-        var meta = data['series'][idx]['meta'];
-        $("#email_sent_chart_legend").append('<li><span class="' + legend + '"></span><br/>' + meta + '</li>')
-    })
-    var email_sent_chart = new Chartist.Pie("#email_sent_chart", data, opts)
-    email_sent_chart.on('draw', function(data) {
-        if (data.meta !== undefined) {
-            data.element.addClass(statuses[data.meta].slice);
-        }
-    })
-    // Setup the average chart listeners
-    $piechart = $("#email_sent_chart")
-    var $pietoolTip = $piechart
-        .append('<div class="chartist-tooltip"></div>')
-        .find('.chartist-tooltip')
-        .hide();
-
-    $piechart.on('mouseenter', '.ct-slice-donut', function() {
-        var $point = $(this)
-        value = $point.attr('ct:value')
-        label = $point.attr('ct:meta')
-        $pietoolTip.html(label + ': ' + value.toString()).show();
-    });
-
-    $piechart.on('mouseleave', '.ct-slice-donut', function() {
-        $pietoolTip.hide();
-    });
-    $piechart.on('mousemove', function(event) {
-        $pietoolTip.css({
-            left: (event.offsetX || event.originalEvent.layerX) - $pietoolTip.width() / 2 - 10,
-            top: (event.offsetY + 40 || event.originalEvent.layerY) - $pietoolTip.height() - 80
-        });
+    var chart = AmCharts.makeChart("sentpiechart", {
+      "type": "pie",
+      "startDuration": 0,
+       "theme": "light",
+      "addClassNames": true,
+      "legend":{
+        "position":"bottom",
+        "align":"center",
+        "autoMargins":false
+      },
+      "innerRadius": "30%",
+      "defs": {
+        "filter": [{
+          "id": "shadow",
+          "width": "200%",
+          "height": "200%",
+          "feOffset": {
+            "result": "offOut",
+            "in": "SourceAlpha",
+            "dx": 0,
+            "dy": 0
+          },
+          "feGaussianBlur": {
+            "result": "blurOut",
+            "in": "offOut",
+            "stdDeviation": 5
+          },
+          "feBlend": {
+            "in": "SourceGraphic",
+            "in2": "blurOut",
+            "mode": "normal"
+          }
+        }]
+      },
+      "dataProvider": [{
+        "status": "Email Sent",
+        "litres": totals['sent'],
+        "color": "#67b7dc"
+        
+      }, {
+        "status": "Error Sending",
+        "litres": totals['error_sending'],
+        "color": "#fdd400"
+      }],
+      "valueField": "litres",
+      "titleField": "status",
+      "colorField": "color",
+      "labelsEnabled": false,
+      "export": {
+        "enabled": true
+    }
     });
 }
 
 function createUniqueCredsPieChart(summaryStats) {
-    var opts = {
-        donut: true,
-        donutWidth: 50,
-        chartPadding: 0,
-        showLabel: true
-    };
     var totals = getSummaryTotals(summaryStats);
-    var data = {
-        series: [{meta: 'Credentials Entered', slice: 'ct-slice-donut-clicked', legend: 'ct-legend-clicked', value:totals['unique-credentials']}, {meta: "No Credentials", slice: 'ct-slice-donut-sent', legend: "ct-legend-sent", value:totals['sent'] - totals['unique-credentials']}]
-    };
-    $("#email_creds_chart_legend").html("")
-    $.each(data['series'], function(idx) {
-        var legend = data['series'][idx]['legend'];
-        var meta = data['series'][idx]['meta'];
-        $("#email_creds_chart_legend").append('<li><span class="' + legend + '"></span><br/>' + meta + '</li>')
-    })
-    var email_creds_chart = new Chartist.Pie("#email_creds_chart", data, opts)
-    email_creds_chart.on('draw', function(data) {
-        if (data.meta !== undefined) {
-            data.element.addClass(statuses[data.meta].slice);
-        }
-    })
-    // Setup the average chart listeners
-    $piechart = $("#email_creds_chart")
-    var $pietoolTip = $piechart
-        .append('<div class="chartist-tooltip"></div>')
-        .find('.chartist-tooltip')
-        .hide();
-
-    $piechart.on('mouseenter', '.ct-slice-donut', function() {
-        var $point = $(this)
-        value = $point.attr('ct:value')
-        label = $point.attr('ct:meta')
-        $pietoolTip.html(label + ': ' + value.toString()).show();
-    });
-
-    $piechart.on('mouseleave', '.ct-slice-donut', function() {
-        $pietoolTip.hide();
-    });
-    $piechart.on('mousemove', function(event) {
-        $pietoolTip.css({
-            left: (event.offsetX || event.originalEvent.layerX) - $pietoolTip.width() / 2 - 10,
-            top: (event.offsetY + 40 || event.originalEvent.layerY) - $pietoolTip.height() - 80
-        });
+    var chart = AmCharts.makeChart("credentialpiechart", {
+      "type": "pie",
+      "startDuration": 0,
+       "theme": "light",
+      "addClassNames": true,
+      "legend":{
+        "position":"bottom",
+        "align":"center",
+        "autoMargins":false
+      },
+      "innerRadius": "30%",
+      "defs": {
+        "filter": [{
+          "id": "shadow",
+          "width": "200%",
+          "height": "200%",
+          "feOffset": {
+            "result": "offOut",
+            "in": "SourceAlpha",
+            "dx": 0,
+            "dy": 0
+          },
+          "feGaussianBlur": {
+            "result": "blurOut",
+            "in": "offOut",
+            "stdDeviation": 5
+          },
+          "feBlend": {
+            "in": "SourceGraphic",
+            "in2": "blurOut",
+            "mode": "normal"
+          }
+        }]
+      },
+      "dataProvider": [{
+        "status": "Credentials Entered",
+        "litres": totals['unique-credentials'],
+        "color": "#fdd400"
+      }, {
+        "status": "No Credentials",
+        "litres": totals['sent']-totals['unique-credentials'],
+        "color": "#67b7dc"
+      }],
+      "valueField": "litres",
+      "titleField": "status",
+      "colorField": "color",
+      "labelsEnabled": false,
+      "export": {
+        "enabled": true
+    }
     });
 }
 
@@ -854,16 +883,16 @@ var Chart = {
     }
     var totals = getSummaryTotals(summaryStats);
     var chartData = [{
-        "status": "Email Sent",
+        "status": "Email<br>Sent",
         "numbers": totals['sent'],
         "townSize": 7,
         "activityPercent": Number((totals['sent']/totals['sent'])*100).toFixed(2),
     }, {
-        "status": "Error Sending",
+        "status": "Error<br>Sending",
         "numbers": totals['error_sending'],
         "NotActivityPercent": Number((totals['error_sending']/totals['sent'])*100).toFixed(2)
     }, {
-        "status": "Emails Opened",
+        "status": "Emails<br>Opened",
         "numbers": totals['opened'],
         "townSize": 16,
         "activityPercent": Number((totals['opened']/totals['sent'])*100).toFixed(2),
@@ -872,16 +901,16 @@ var Chart = {
         "numbers": totals['sent'] - totals['opened'],
         "NotActivityPercent": Number(((totals['sent'] - totals['opened'])/totals['sent'])*100).toFixed(2)
     }, {
-        "status": "Links Clicked",
+        "status": "Links<br>Clicked",
         "numbers": totals['clicked'],
         "townSize": 11,
         "activityPercent": Number((totals['clicked']/totals['sent'])*100).toFixed(2),
     }, {
-        "status": "Didn't Click",
+        "status": "Didn't<br>Click",
         "numbers":  totals['sent'] - totals['clicked'],
         "NotActivityPercent": Number(((totals['sent'] - totals['clicked'])/totals['sent'])*100).toFixed(2)
     }, {
-        "status": "Credentials Entered",
+        "status": "Credentials<br>Entered",
         "numbers": totals['unique-credentials'],
         "townSize": 18,
         "activityPercent": Number((totals['unique-credentials']/totals['sent'])*100).toFixed(2),
@@ -889,7 +918,7 @@ var Chart = {
         "townName2": "Credentials Entered",
         "bulletClass": "lastBullet"
     }, {
-        "status": "No Credentials",
+        "status": "No<br>Credentials",
         "numbers": totals['sent'] -  totals['unique-credentials'],
         "NotActivityPercent": Number(((totals['sent'] - totals['unique-credentials'])/totals['sent'])*100).toFixed(2),
         "alpha": 0.4,
