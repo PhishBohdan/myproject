@@ -1,4 +1,4 @@
-{{ define "base" }}
+s{{ define "base" }}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,24 +6,44 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Phishaway - Phishing Toolkit">
+    <meta name="description" content="Gophish - Open-Source Phishing Toolkit">
     <meta name="author" content="Jordan Wright (http://github.com/jordan-wright)">
-    <link rel="shortcut icon" href="/favicon.png">
-
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
     <title>{{ .Title }} - Phishaway</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="/css/main.css" rel="stylesheet">
-    <link href="/css/dashboard.css" rel="stylesheet">
-    <link href="/css/flat-ui.css" rel="stylesheet">
-    <link href="/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,700' rel='stylesheet' type='text/css'>
+    <!--Custom stly by star-->
+    <link href="../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="../assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" /> -->
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href="../assets/global/css/components.min.css" rel="stylesheet" id="style_components" type="text/css" />
+    <link href="../assets/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN PAGE LEVEL STYLES -->
+    <link href="../assets/pages/css/login.min.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .navbar-custom{
+          background-color: #2b3643;
+
+        }
+        .navbar-custom a, .navbar-custom a:hover{
+          color:#c6cfda !important;
+          background-color: #2b3643 !important;
+        }
+        .navbar-custom .navbar-toggle{
+          border:solid 1px #c6cfda !important;
+        }
+        .navbar-custom .navbar-toggle .icon-bar{
+          background-color: #c6cfda !important
+        }
+    </style>
+    <!--Custom stly by star-->
 </head>
 
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<body class="login">
+    <div class="navbar navbar-custom navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -36,23 +56,91 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="goback"><i class="fa fa-arrow-circle-o-left fa-lg"></i> Back</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container">
-        <h4 class="form-signin-heading">Add Restricted User</h4>
-        <form class="form-signin" action="/addrestricteduser" method="POST">
-            {{template "flashes" .Flashes}}
-            <input type="text" name="username" class="form-control top-input" placeholder="Username" required autofocus/>
-            <input type="password" name="password" class="form-control middle-input" placeholder="Password" required/>
-            <input type="password" name="confirm_password" class="form-control bottom-input" placeholder="Confirm Password" required/>
-            <input type="hidden" name="csrf_token" value="{{.Token}}"/>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
-        </form>
+    <div class="logo">
+        <a href="index.html">
+            <img id="logo" src="/images/logo_purple.png" /> </a>
     </div>
+    <!-- BEGIN Register -->
+    <div class="content">
+        <!-- BEGIN LOGIN FORM -->
+        <form class="form-signin" action="/addrestricteduser" method="POST">
+            <h3 class="form-title">Add restricted user.</h3>
+            {{template "flashes" .Flashes}}
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                <span> Enter any username and password. </span>
+            </div>
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <label class="control-label visible-ie8 visible-ie9">Username</label>
+                <div class="input-icon">
+                    <i class="fa fa-user"></i>
+                    <input type="text" name="username" class="form-control top-input placeholder-no-fix" placeholder="Username" required autofocus/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">Password</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" /> 
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">Confirm Password</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" name="confirm_password" class="form-control bottom-input" placeholder="Confirm Password" required/>
+                    <input type="hidden" name="csrf_token" value="{{.Token}}"/>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn green pull-right"> Register </button>
+            </div>
+
+            <div class="forget-password">
+                <p class="text-center"> 2017 &copy; secure.phishaway.com</p>
+            </div>
+        </form>
+        <!-- END LOGIN FORM -->
+       
+    </div>
+    <!-- END Register -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+    <script src="../assets/global/plugins/backstretch/jquery.backstretch.min.js" type="text/javascript"></script>
+    <script src="/js/ui-bootstrap-0.10.0.min.js"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN THEME GLOBAL SCRIPTS -->
+    <script src="../assets/global/scripts/app.min.js" type="text/javascript"></script>
+    <!-- END THEME GLOBAL SCRIPTS -->
+    <!-- BEGIN THEME LAYOUT SCRIPTS -->
+    <script src="../assets/layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
+    <script src="../assets/layouts/layout/scripts/layoutScript.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            $.backstretch([
+                "../assets/pages/media/bg/1.jpg",
+                "../assets/pages/media/bg/2.jpg",
+                "../assets/pages/media/bg/3.jpg",
+                "../assets/pages/media/bg/4.jpg"
+                ], {
+                  fade: 1000,
+                  duration: 8000
+                }
+            );
+        })
+    </script>
 </body>
 
 </html>

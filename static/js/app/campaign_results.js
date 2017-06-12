@@ -570,6 +570,13 @@ function load() {
 $(document).ready(function() {
     TimelineClass.init();
     load();
+    $(document).on('click', 'a.title' ,function(){
+        $('ul.nav-tabs li').removeClass('active');
+        $('div.tab-pane').removeClass('active');
+        $('ul.nav-tabs li:nth-child(2)').addClass('active');
+        $('div.tab-pane:nth-child(2)').addClass('active');
+
+    })
     // Start the polling loop
     // function refresh() {
     //     if (!doPoll) {
@@ -647,7 +654,7 @@ var TimelineClass = {
 }
 var PiechartClass = {
     init: function(email_data){
-        console.log(email_data['series'])
+        console.log(window.location.pathname);
         campaign.id = window.location.pathname.split('/').slice(-1)[0]
         api.campaignId.results(campaign.id)
             .success(function(c) {

@@ -277,6 +277,7 @@ function processCampaignsLimit(campaignTable, campaigns) {
 }
 
 $(document).ready(function() {
+    
     $("#launch_date").datetimepicker({
             "widgetPositioning": {
                 "vertical": "bottom"

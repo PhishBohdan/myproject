@@ -1,129 +1,6 @@
 var map = null;
 var campaignTable = null;
 var detailsTable = null;
-
-// statuses is a helper map to point result statuses to ui classes
-var statuses = {
-    "Email Sent": {
-        slice: "ct-slice-donut-sent",
-        legend: "ct-legend-sent",
-        label: "label-success",
-        icon: "fa-envelope",
-        point: "ct-point-sent"
-    },
-    "Error Sending": {
-        slice: "ct-slice-donut-opened",
-        legend: "ct-legend-opened",
-        label: "label-warning",
-        icon: "fa-envelope",
-        point: "ct-point-opened"
-    },
-
-    "Unopened": {
-        slice: "ct-slice-donut-sent",
-        legend: "ct-legend-sent",
-        label: "label-success",
-        icon: "fa-envelope",
-        point: "ct-point-sent"
-    },
-    "Email Opened": {
-        slice: "ct-slice-donut-opened",
-        legend: "ct-legend-opened",
-        label: "label-warning",
-        icon: "fa-envelope",
-        point: "ct-point-opened"
-    },
-    "Opened": {
-        slice: "ct-slice-donut-opened",
-        legend: "ct-legend-opened",
-        label: "label-warning",
-        icon: "fa-envelope",
-        point: "ct-point-opened"
-    },
-    "Didn't Submit": {
-        slice: "ct-slice-donut-sent",
-        legend: "ct-legend-sent",
-        label: "label-success",
-        icon: "fa-envelope",
-        point: "ct-point-sent"
-    },
-
-    "Didn't Click": {
-        slice: "ct-slice-donut-sent",
-        legend: "ct-legend-sent",
-        label: "label-success",
-        icon: "fa-envelope",
-        point: "ct-point-sent"
-    },
-    "Clicked": {
-        slice: "ct-slice-donut-clicked",
-        legend: "ct-legend-clicked",
-        label: "label-danger",
-        icon: "fa-mouse-pointer",
-        point: "ct-point-clicked"
-    },
-    "Credentials Entered": {
-        slice: "ct-slice-donut-clicked",
-        legend: "ct-legend-clicked",
-        label: "label-danger",
-        icon: "fa-exclamation",
-        point: "ct-point-clicked"
-    },
-    "No Credentials" : {
-        slice: "ct-slice-donut-sent",
-        legend: "ct-legend-sent",
-        label: "label-success",
-        icon: "fa-envelope",
-        point: "ct-point-sent",
-    },
-    "Success": {
-        slice: "ct-slice-donut-clicked",
-        legend: "ct-legend-clicked",
-        label: "label-danger",
-        icon: "fa-exclamation",
-        point: "ct-point-clicked"
-    },
-    "Error": {
-        slice: "ct-slice-donut-error",
-        legend: "ct-legend-error",
-        label: "label-default",
-        icon: "fa-times",
-        point: "ct-point-error"
-    },
-    "Error Sending Email": {
-        slice: "ct-slice-donut-error",
-        legend: "ct-legend-error",
-        label: "label-default",
-        icon: "fa-times",
-        point: "ct-point-error"
-    },
-    "Submitted Data": {
-        slice: "ct-slice-donut-clicked",
-        legend: "ct-legend-clicked",
-        label: "label-danger",
-        icon: "fa-exclamation",
-        point: "ct-point-clicked"
-    },
-    "Unknown": {
-        slice: "ct-slice-donut-error",
-        legend: "ct-legend-error",
-        label: "label-default",
-        icon: "fa-question",
-        point: "ct-point-error"
-    },
-    "Sending": {
-        slice: "ct-slice-donut-sending",
-        legend: "ct-legend-sending",
-        label: "label-primary",
-        icon: "fa-spinner",
-        point: "ct-point-sending"
-    },
-    "Campaign Created": {
-        label: "label-success",
-        icon: "fa-rocket"
-    }
-}
-
 // labels is a map of campaign statuses to
 // CSS classes
 var labels = {
@@ -144,15 +21,9 @@ var detailLabels = {
     "Error": "label-danger"
 }
 
-
 var campaign = {}
 var bubbles = []
-
-function dismiss() {
-    $("#modal\\.flashes").empty()
-    $("#modal").modal('hide')
-}
-
+var Campaign_array = [];
 function matchFilter(campaignName, filterTerms) {
     for (let filter of filterTerms) {
         if (!campaignName.includes(filter)) {
@@ -176,7 +47,6 @@ function getSummaryTotals(summaryStats) {
     var phishSuccess = 0;
     var submittedData = 0;
     var uniqueCredentials = 0;
-
     $.each(summaryStats, function(i, campaign) {
         sent += campaign.sent;
         error_sending += campaign.error_sending;
@@ -185,40 +55,173 @@ function getSummaryTotals(summaryStats) {
         submittedData += campaign.credentialsentered;
         uniqueCredentials += campaign.uniquecredentialsentered;
     });
+    
     return {'sent': sent, 'error_sending': error_sending, 'opened': opened, 'clicked': clicked, 'submitted-data': submittedData, 'unique-credentials': uniqueCredentials};
 }
+function init_campaigns(summaryStats) {
+    var error_sending = 0 ;
+    var sent = 0;
+    var opened = 0;
+    var clicked = 0;
+    var phishSuccess = 0;
+    var submittedData = 0;
+    var uniqueCredentials = 0;
+    var i = 0;
+    $.each(summaryStats, function(i, campaign) {
+        sent += campaign.sent;
+        error_sending += campaign.error_sending;
+        opened += campaign.opened;
+        clicked += campaign.clicked;
+        submittedData += campaign.credentialsentered;
+        uniqueCredentials += campaign.uniquecredentialsentered;
+        var new_item = $('#total_detail').clone();
+        var chart_id = "filtered_barchart"+i;
+        var campaign_status = "In progress";
+        if(campaign.status == "Completed"){
+            campaign_status ="Completed";
+        }
+        new_item.attr('id',"filtered"+i);
+        new_item.find("#dashboard_amchart_1").attr("id",chart_id);
+        new_item.find("#portlet_tab_1").attr("id","portlet_tab_1_"+i);
+        new_item.find("a[href='#portlet_tab_1']").attr("href","#portlet_tab_1_"+i);
+        new_item.find("#portlet_tab_2").attr("id","portlet_tab_2_"+i);
+        new_item.find("a[href='#portlet_tab_2']").attr("href","#portlet_tab_2_"+i);
+        new_item.find("div#sentpiechart").attr("id","sentpiechart_flitered_"+i);
+        new_item.find("div#openpiechart").attr("id","openpiechart_flitered_"+i);
+        new_item.find("div#clickpiechart").attr("id","clickpiechart_flitered_"+i);
+        new_item.find("div#credentialpiechart").attr("id","credentialpiechart_flitered_"+i);
+        new_item.find("a.accordion-toggle").attr("data-id",i);
+        $('#tab_1').append(new_item);
+        init_campaigns_percent("filtered"+i,campaign.name, campaign.sent, campaign.error_sending, campaign.opened, campaign.clicked, campaign.uniquecredentialsentered,campaign_status);
+        i++;
+    });
+    init_campaigns_percent("total_detail","Totals", sent, error_sending, opened, clicked, uniqueCredentials,"Totals");
+
+}
+function make_Item_charts(id) {
+    var chart_id = "filtered_barchart"+id;"filtered_barchart"+id;
+    var campaign = Campaign_array[parseInt(id)];
+    console.log(campaign);
+    var chartData = [
+        chart_id,
+        campaign.sent,
+        campaign.error_sending,
+        campaign.opened,
+        campaign.clicked,
+        campaign.uniquecredentialsentered
+    ];
+    var sentData = [
+      "sent",
+      "sentpiechart_flitered_"+id,
+      campaign.sent,
+      campaign.error_sending
+    ];
+    var openedData = [
+      "opened",
+      "openpiechart_flitered_"+id,
+      campaign.sent,
+      campaign.opened
+    ];
+    var clickedData = [
+      "clicked",
+      "clickpiechart_flitered_"+id,
+      campaign.sent,
+      campaign.clicked
+    ];
+    var credetialData = [
+      "unique-credentials",
+      "credentialpiechart_flitered_"+id,
+      campaign.sent,
+      campaign.uniquecredentialsentered
+    ]
+    Chart.initItemBarchart(chartData);
+    Chart.initItemPiechart(sentData);
+    Chart.initItemPiechart(openedData);
+    Chart.initItemPiechart(clickedData);
+    Chart.initItemPiechart(credetialData);
+}
+
 
 function percent(frac) {
     return Math.floor(frac * 400)/4;
 }
+function init_campaigns_percent(id,name, sent, error_sending, opened, clicked, uniquecredentialsentered, status){
+    var labelClass = "success";
+    if (status == "Completed"){
+        labelClass ="danger"
+    }
+    var errorsend_percent= percent(parseInt(error_sending)/parseInt(sent))+"%";
+    var opened_percent= percent(parseInt(opened)/parseInt(sent))+"%";
+    var clicked_percent= percent(parseInt(clicked)/parseInt(sent))+"%";
+    var credential_percent= percent(parseInt(uniquecredentialsentered)/parseInt(sent))+"%";
+    $("#"+id+" span.campaign_name").html(name);
+    $("#"+id+" .ribbon-shadow").text(status);
+    $("#"+id+" #emails-opened").html(opened);
+    $("#"+id+" #emails-clicked").html(clicked);
+    $("#"+id+" #emails-unique").html(uniquecredentialsentered);
+    $("#"+id+" #email_sent_value").html(sent);
+    $("#"+id+" #email_sent_bar").css("width",percent((parseInt(sent)-parseInt(error_sending))/parseInt(sent))+ "%");
+    $("#"+id+" div.email_sent_per").html(percent((parseInt(sent)-parseInt(error_sending))/parseInt(sent))+ "%");
+    $("#"+id+" #email_click_value").html(clicked);
+    $("#"+id+" #email_click_bar").css("width",clicked_percent);
+    $("#"+id+" div.email_click_per").html(clicked_percent);
+    $("#"+id+" #email_open_value").html(opened);
+    $("#"+id+" #email_open_bar").css("width",opened_percent);
+    $("#"+id+" div.email_open_per").html(opened_percent);
+    $("#"+id+" #email_credential_value").html(uniquecredentialsentered);
+    $("#"+id+" #email_credential_bar").css("width", credential_percent);
+    $("#"+id+" div.email_credential_per").html(credential_percent);
+}
 function updateSummaryStats(summaryStats) {
     var totals = getSummaryTotals(summaryStats);
+    init_campaigns(summaryStats);
     var filter = encodeURIComponent(getFilter());
     var ahref = "<a class='btn btn-primary' href='/filterresults?filter=";
     var sentStatuses = "&statuses=Email+Sent&statuses=Email+Opened&statuses=Clicked+Link&statuses=Submitted+Data";
     var openedStatuses = "&statuses=Email+Opened&statuses=Clicked+Link&statuses=Submitted+Data";
     var clickedStatuses = "&statuses=Clicked+Link&statuses=Submitted+Data";
     var submittedDataStatuses = "&statuses=Submitted+Data";
-    var linkSent = ahref + filter + sentStatuses + "'>" + totals['sent'] + " (" +percent(parseInt(totals['sent'])/parseInt(totals['sent']))+ "%)"+'</a>';
+    var linkSent = ahref + filter + sentStatuses + "'>" + totals['sent'] + " (" +percent(totals['sent']/parseInt(totals['sent']))+ "%)"+'</a>';
     var linkOpened = ahref + filter + openedStatuses + "'>" + totals['opened'] + " (" +percent(parseInt(totals['opened'])/parseInt(totals['sent']))+ "%)" + '</a>';
     var linkClicked = ahref + filter + clickedStatuses + "'>" + totals['clicked'] + " (" +percent(parseInt(totals['clicked'])/parseInt(totals['sent']))+ "%)" + '</a>';
     var linkUniqueCredentials = ahref + filter + submittedDataStatuses + "'>" + totals['unique-credentials'] + " (" +percent(parseInt(totals['unique-credentials'])/parseInt(totals['sent']))+ "%)" + '</a>';
-    $("#emails-sent").html(linkSent);
-    $("#emails-opened").html(linkOpened);
-    $("#emails-clicked").html(linkClicked);
-    $("#emails-unique").html(linkUniqueCredentials);
-    $("#email_sent_value").html(totals['sent']);
-    $("#email_sent_bar").css("width",percent(parseInt(totals['sent'])/parseInt(totals['sent']))+ "%");
-    $("div.email_sent_per").html(percent(parseInt(totals['sent'])/parseInt(totals['sent']))+ "%");
-    $("#email_click_value").html(totals['clicked']);
-    $("#email_click_bar").css("width",percent(parseInt(totals['clicked'])/parseInt(totals['sent']))+ "%");
-    $("div.email_click_per").html(percent(parseInt(totals['clicked'])/parseInt(totals['sent']))+ "%");
-    $("#email_open_value").html(totals['opened']);
-    $("#email_open_bar").css("width",percent(parseInt(totals['opened'])/parseInt(totals['sent']))+ "%");
-    $("div.email_open_per").html(percent(parseInt(totals['opened'])/parseInt(totals['sent']))+ "%");
-    $("#email_credential_value").html(totals['unique-credentials']);
-    $("#email_credential_bar").css("width", percent(parseInt(totals['unique-credentials'])/parseInt(totals['sent']))+ "%");
-    $("div.email_credential_per").html(percent(parseInt(totals['unique-credentials'])/parseInt(totals['sent']))+ "%");
+    var chartData = [
+        "dashboard_amchart_1",
+        totals['sent'],
+        totals['error_sending'],
+        totals['opened'],
+        totals['clicked'],
+        totals['unique-credentials'] 
+    ];
+    var sentData = [
+      "sent",
+      "sentpiechart",
+      totals['sent'],
+      totals['error_sending']
+    ];
+    var openedData = [
+      "opened",
+      "openpiechart",
+      totals['sent'],
+      totals['opened']
+    ];
+    var clickedData = [
+      "clicked",
+      "clickpiechart",
+      totals['sent'],
+      totals["clicked"]
+    ];
+    var credetialData = [
+      "unique-credentials",
+      "credentialpiechart",
+      totals['sent'],
+      totals['unique-credentials']
+    ]
+    Chart.initItemBarchart(chartData);
+    Chart.initItemPiechart(sentData);
+    Chart.initItemPiechart(openedData);
+    Chart.initItemPiechart(clickedData);
+    Chart.initItemPiechart(credetialData);
 }
 
 function getFilter() {
@@ -252,315 +255,26 @@ function populateSearchForm() {
         document.getElementById("exactmatch").checked = true;
     }
 }
+function appendDetailData(summaryStats) {
+    var error_sending = 0 ;
+    var sent = 0;
+    var opened = 0;
+    var clicked = 0;
+    var phishSuccess = 0;
+    var submittedData = 0;
+    var uniqueCredentials = 0;
 
-function load(filter, matchExact) {
-    $("#loading").show();
-    api.campaignssummarystats.get(filter, matchExact)
-        .success(function(summaryStats) {
-            createEmailsSentPieChart(summaryStats);
-            createEmailsOpenedPieChart(summaryStats);
-            createEmailsClickedPieChart(summaryStats);
-            createUniqueCredsPieChart(summaryStats);
-            updateSummaryStats(summaryStats);
-            barChart(summaryStats );
-            Chart.initAmChart1(summaryStats);
-            // pieChart(summaryStats);
-            $("#loading").hide()
-            $("#campaign-results-body").show();
-            populateNamesTable(summaryStats);
-        }).error(function() {
-            $("#loading").hide()
-            errorFlash("Error fetching campaigns")
-        });
-
-    var statuses = ['Email Sent', 'Email Opened', 'Clicked Link', 'Submitted Data'];
-    if (getUrlParameter('details') === 'true') {
-        api.phishingresults.get(filter, matchExact, statuses)
-            .success(function(details) {
-                $("#details-body").show();
-                populateDetailsTable(details);
-            }).error(function() {
-                errorFlash("Error fetching result details")
-            });
-    }
+    $.each(summaryStats, function(i, campaign) {
+        sent += campaign.sent;
+        error_sending += campaign.error_sending;
+        opened += campaign.opened;
+        clicked += campaign.clicked;
+        submittedData += campaign.credentialsentered;
+        uniqueCredentials += campaign.uniquecredentialsentered;
+    });
+    return {'sent': sent, 'error_sending': error_sending, 'opened': opened, 'clicked': clicked, 'submitted-data': submittedData, 'unique-credentials': uniqueCredentials};
 }
-//custom charts function by star using amchart //
-function pieChart(summaryStats){
-    var totals = getSummaryTotals(summaryStats);
-    console.log(totals['error_sending']);
-    var gaugeChart = AmCharts.makeChart("sentpiechart", {
-        "type": "gauge",
-        "fontFamily": "Open Sans",
-        "theme": "light",
-        "axes": [{
-        "axisAlpha": 0,
-        "tickAlpha": 0,
-        "labelsEnabled": false,
-        "startValue": 0,
-        "endValue": totals['sent'],
-        "startAngle": 0,
-        "endAngle": 270,
-        "bands": [{
-          "color": "#eee",
-          "startValue": 0,
-          "endValue": 100,
-          "radius": "100%",
-          "innerRadius": "85%"
-        }, {
-          "color": "#67b7dc",
-          "startValue": 0,
-          "endValue": totals['sent'],
-          "radius": "100%",
-          "innerRadius": "85%",
-          "balloonText": totals['sent']
-        }, {
-          "color": "#eee",
-          "startValue": 0,
-          "endValue": 100,
-          "radius": "80%",
-          "innerRadius": "65%"
-        }, {
-          "color": "#fdd400",
-          "startValue": 0,
-          "endValue": totals['opened'],
-          "radius": "80%",
-          "innerRadius": "65%",
-          "balloonText": totals['opened']
-        }, {
-          "color": "#eee",
-          "startValue": 0,
-          "endValue": 100,
-          "radius": "60%",
-          "innerRadius": "45%"
-        }, {
-          "color": "#f36a5a",
-          "startValue": 0,
-          "endValue": totals['clicked'],
-          "radius": "60%",
-          "innerRadius": "45%",
-          "balloonText": totals['clicked']
-        }, {
-          "color": "#eee",
-          "startValue": 0,
-          "endValue": 100,
-          "radius": "40%",
-          "innerRadius": "25%"
-        }, {
-          "color": "#8E44AD ",
-          "startValue": 0,
-          "endValue": totals['unique-credentials'],
-          "radius": "40%",
-          "innerRadius": "25%",
-          "balloonText": totals['unique-credentials']
-        }]
-        }],
-        "allLabels": [{
-        "text": "Email Sent",
-        "x": "49%",
-        "y": "5%",
-        "size": 13,
-        "bold": false,
-        "color": "#67b7dc",
-        "align": "right"
-        }, {
-        "text": "Email Opened",
-        "x": "49%",
-        "y": "15%",
-        "size": 13,
-        "bold": false,
-        "color": "#fdd400",
-        "align": "right"
-        }, {
-        "text": "Clicked Links",
-        "x": "49%",
-        "y": "24%",
-        "size": 13,
-        "bold": false,
-        "color": "#f36a5a",
-        "align": "right"
-        }, {
-        "text": "Credentials Entered",
-        "x": "49%",
-        "y": "33%",
-        "size": 13,
-        "bold": false,
-        "color": "#8E44AD ",
-        "align": "right"
-        }],
-        "export": {
-        "enabled": true
-        }
-    });
-    var maxval = Math.max(totals['error_sending'],(totals['sent'] - totals['clicked']), (totals['sent'] - totals['opened']), (totals['sent'] - totals['unique-credentials']) )
-    var gaugChart = AmCharts.makeChart("openpiechart", {
-        "type": "gauge",
-        "fontFamily": "Open Sans",
-        "theme": "light",
-        "axes": [{
-        "axisAlpha": 0,
-        "tickAlpha": 0,
-        "labelsEnabled": false,
-        "startValue": 0,
-        "endValue": maxval,
-        "startAngle": 0,
-        "endAngle": 270,
-        "bands": [{
-          "color": "#eee",
-          "startValue": 0,
-          "endValue": 100,
-          "radius": "100%",
-          "innerRadius": "85%"
-        }, {
-          "color": "#67b7dc",
-          "startValue": 0,
-          "endValue": (totals['sent'] - totals['unique-credentials']),
-          "radius": "100%",
-          "innerRadius": "85%",
-          "balloonText": (totals['sent'] - totals['unique-credentials'])
-        }, {
-          "color": "#eee",
-          "startValue": 0,
-          "endValue": 100,
-          "radius": "80%",
-          "innerRadius": "65%"
-        }, {
-          "color": "#fdd400",
-          "startValue": 0,
-          "endValue": (totals['sent'] - totals['clicked']),
-          "radius": "80%",
-          "innerRadius": "65%",
-          "balloonText": (totals['sent'] - totals['clicked'])
-        }, {
-          "color": "#eee",
-          "startValue": 0,
-          "endValue": 100,
-          "radius": "60%",
-          "innerRadius": "45%"
-        }, {
-          "color": "#f36a5a",
-          "startValue": 0,
-          "endValue": (totals['sent'] - totals['opened']),
-          "radius": "60%",
-          "innerRadius": "45%",
-          "balloonText": (totals['sent'] - totals['opened'])
-        }, {
-          "color": "#eee",
-          "startValue": 0,
-          "endValue": 100,
-          "radius": "40%",
-          "innerRadius": "25%"
-        }, {
-          "color": "#8E44AD ",
-          "startValue": 0,
-          "endValue": totals['error_sending'],
-          "radius": "40%",
-          "innerRadius": "25%",
-          "balloonText": totals['error_sending']
-        }]
-        }],
-        "allLabels": [{
-        "text": "No Credentials",
-        "x": "49%",
-        "y": "5%",
-        "size": 13,
-        "bold": false,
-        "color": "#67b7dc",
-        "align": "right"
-        }, {
-        "text": "Didn't Click",
-        "x": "49%",
-        "y": "15%",
-        "size": 13,
-        "bold": false,
-        "color": "#fdd400",
-        "align": "right"
-        }, {
-        "text": "Unopened   ",
-        "x": "49%",
-        "y": "24%",
-        "size": 13,
-        "bold": false,
-        "color": "#f36a5a",
-        "align": "right"
-        }, {
-        "text": "Error Sending",
-        "x": "49%",
-        "y": "33%",
-        "size": 13,
-        "bold": false,
-        "color": "#8E44AD",
-        "align": "right"
-        }],
-        "export": {
-        "enabled": true
-        }
-    });
 
-   }
-function barChart(summaryStats){
-    var totals = getSummaryTotals(summaryStats);
-    
-    var chart = AmCharts.makeChart("barchartdiv", {
-        "theme": "none",
-        "type": "serial",
-        
-        "dataProvider": [{
-            "status": "Emails Sent",
-            "done": totals['sent'],
-            "notyet": totals['error_sending'],
-            "errorballoontitle":"Error Sending: "
-        }, {
-            "status": "Emails Opened",
-            "done": totals['opened'],
-            "notyet": totals['sent'] - totals['opened'],
-            "errorballoontitle":"Unopened: "
-        }, {
-            "status": "Links Clicked",
-            "done": totals['clicked'],
-            "notyet": totals['sent'] - totals['clicked'],
-            "errorballoontitle":"Didn't Click: "
-        }, {
-            "status": "Credentials Entered",
-            "done": totals['unique-credentials'],
-            "notyet":totals['sent'] -  totals['unique-credentials'],
-            "errorballoontitle":"No Credentials: "
-        }],
-        "startDuration": 1,
-        "graphs": [ {
-            "balloonText": "[[title]] [[category]]: <b>[[value]]</b>",
-            "balloonFunction" : adjustBalloonText,
-            "fillAlphas": 0.7,
-            "lineAlpha": 0.2,
-            "title": "Error",
-            "type": "column",
-            "valueField": "notyet"
-        },{
-            "balloonText": "[[category]]: <b>[[value]]</b>",
-            "fillAlphas": 0.7,
-            "fillColors":"#0D8ECF",
-            "lineAlpha": 0.2,
-            "title": "Success",
-            "type": "column",
-            "valueField": "done"
-        }],
-        "plotAreaFillAlphas": 0.1,
-        "depth3D": 20,
-        "angle": 30,
-        "rotate": true,
-        "categoryField": "status",
-        "categoryAxis": {
-            "gridPosition": "start"
-        },
-        "export": {
-            "enabled": true
-         }
-    });
-    function adjustBalloonText(graphDataItem, chart){
-        var value = graphDataItem.values.value;
-        var errormsg = graphDataItem.serialDataItem.dataContext.errorballoontitle
-        return errormsg + value;
-    }
-}
 function populateDetailsTable(results) {
     detailsTable.clear().draw();
     if (results.length > 2000) {
@@ -621,225 +335,32 @@ function populateNamesTable(summaryStats) {
         campaignTable.draw();
     }
 }
-function createEmailsOpenedPieChart(summaryStats) {
-    var totals = getSummaryTotals(summaryStats);
-    var chart = AmCharts.makeChart("openpiechart", {
-      "type": "pie",
-      "startDuration": 0,
-      "theme": "light",
-      "addClassNames": true,
-      "legend":{
-        "position":"bottom",
-        "align":"center",
-        "autoMargins":false
-      },
-      "innerRadius": "30%",
-      "defs": {
-        "filter": [{
-          "id": "shadow",
-          "width": "200%",
-          "height": "200%",
-          "feOffset": {
-            "result": "offOut",
-            "in": "SourceAlpha",
-            "dx": 0,
-            "dy": 0
-          },
-          "feGaussianBlur": {
-            "result": "blurOut",
-            "in": "offOut",
-            "stdDeviation": 5
-          },
-          "feBlend": {
-            "in": "SourceGraphic",
-            "in2": "blurOut",
-            "mode": "normal"
-          }
-        }]
-      },
-      "dataProvider": [{
-        "status": "Email Opened",
-        "litres": totals['opened'],
-        "color": "#fdd400"
-      }, {
-        "status": "Unopened",
-        "litres": totals['sent']-totals['opened'],
-        "color": "#67b7dc"
-      }],
-      "valueField": "litres",
-      "titleField": "status",
-      "colorField": "color",
-      "labelsEnabled": false,
-      "export": {
-        "enabled": true
+function load(filter, matchExact) {
+    $("#loading").show();
+    api.campaignssummarystats.get(filter, matchExact)
+        .success(function(summaryStats) {
+            Campaign_array = summaryStats;
+            updateSummaryStats(summaryStats);
+            $("#loading").hide()
+            $("#campaign-results-body").show();
+            populateNamesTable(summaryStats);
+        }).error(function() {
+            $("#loading").hide()
+            errorFlash("Error fetching campaigns")
+        });
+
+    var statuses = ['Email Sent', 'Email Opened', 'Clicked Link', 'Submitted Data'];
+    if (getUrlParameter('details') === 'true') {
+        api.phishingresults.get(filter, matchExact, statuses)
+            .success(function(details) {
+                $("#details-body").show();
+                populateDetailsTable(details);
+            }).error(function() {
+                errorFlash("Error fetching result details")
+            });
     }
-    });
-}
-function createEmailsClickedPieChart(summaryStats) {
-    var totals = getSummaryTotals(summaryStats);
-    var chart = AmCharts.makeChart("clickpiechart", {
-      "type": "pie",
-      "startDuration": 0,
-       "theme": "light",
-      "addClassNames": true,
-      "legend":{
-        "position":"bottom",
-        "align":"center",
-        "autoMargins":false
-      },
-      "innerRadius": "30%",
-      "defs": {
-        "filter": [{
-          "id": "shadow",
-          "width": "200%",
-          "height": "200%",
-          "feOffset": {
-            "result": "offOut",
-            "in": "SourceAlpha",
-            "dx": 0,
-            "dy": 0
-          },
-          "feGaussianBlur": {
-            "result": "blurOut",
-            "in": "offOut",
-            "stdDeviation": 5
-          },
-          "feBlend": {
-            "in": "SourceGraphic",
-            "in2": "blurOut",
-            "mode": "normal"
-          }
-        }]
-      },
-      "dataProvider": [{
-        "status": "Links Clicked",
-        "litres": totals['clicked'],
-        "color": "#fdd400"
-      }, {
-        "status": "Didn't Clicked",
-        "litres": totals['sent']-totals['clicked'],
-        "color": "#67b7dc"
-      }],
-      "valueField": "litres",
-      "titleField": "status",
-      "colorField": "color",
-      "labelsEnabled": false,
-      "export": {
-        "enabled": true
-    }
-    });
 }
 
-function createEmailsSentPieChart(summaryStats) {
-    var totals = getSummaryTotals(summaryStats);
-    var chart = AmCharts.makeChart("sentpiechart", {
-      "type": "pie",
-      "startDuration": 0,
-       "theme": "light",
-      "addClassNames": true,
-      "legend":{
-        "position":"bottom",
-        "align":"center",
-        "autoMargins":false
-      },
-      "innerRadius": "30%",
-      "defs": {
-        "filter": [{
-          "id": "shadow",
-          "width": "200%",
-          "height": "200%",
-          "feOffset": {
-            "result": "offOut",
-            "in": "SourceAlpha",
-            "dx": 0,
-            "dy": 0
-          },
-          "feGaussianBlur": {
-            "result": "blurOut",
-            "in": "offOut",
-            "stdDeviation": 5
-          },
-          "feBlend": {
-            "in": "SourceGraphic",
-            "in2": "blurOut",
-            "mode": "normal"
-          }
-        }]
-      },
-      "dataProvider": [{
-        "status": "Email Sent",
-        "litres": totals['sent'],
-        "color": "#67b7dc"
-        
-      }, {
-        "status": "Error Sending",
-        "litres": totals['error_sending'],
-        "color": "#fdd400"
-      }],
-      "valueField": "litres",
-      "titleField": "status",
-      "colorField": "color",
-      "labelsEnabled": false,
-      "export": {
-        "enabled": true
-    }
-    });
-}
-
-function createUniqueCredsPieChart(summaryStats) {
-    var totals = getSummaryTotals(summaryStats);
-    var chart = AmCharts.makeChart("credentialpiechart", {
-      "type": "pie",
-      "startDuration": 0,
-       "theme": "light",
-      "addClassNames": true,
-      "legend":{
-        "position":"bottom",
-        "align":"center",
-        "autoMargins":false
-      },
-      "innerRadius": "30%",
-      "defs": {
-        "filter": [{
-          "id": "shadow",
-          "width": "200%",
-          "height": "200%",
-          "feOffset": {
-            "result": "offOut",
-            "in": "SourceAlpha",
-            "dx": 0,
-            "dy": 0
-          },
-          "feGaussianBlur": {
-            "result": "blurOut",
-            "in": "offOut",
-            "stdDeviation": 5
-          },
-          "feBlend": {
-            "in": "SourceGraphic",
-            "in2": "blurOut",
-            "mode": "normal"
-          }
-        }]
-      },
-      "dataProvider": [{
-        "status": "Credentials Entered",
-        "litres": totals['unique-credentials'],
-        "color": "#fdd400"
-      }, {
-        "status": "No Credentials",
-        "litres": totals['sent']-totals['unique-credentials'],
-        "color": "#67b7dc"
-      }],
-      "valueField": "litres",
-      "titleField": "status",
-      "colorField": "color",
-      "labelsEnabled": false,
-      "export": {
-        "enabled": true
-    }
-    });
-}
 
 $(document).ready(function() {
     $("#loading").hide()
@@ -858,6 +379,14 @@ $(document).ready(function() {
     });
     var filter = getUrlParameter('filter');
     load(getFilter(), getMatchExact());
+    $(document).on('click', ".accordion-toggle", function () {
+        $(this).parents('.panel-heading').siblings('.chartpanel').toggleClass('hidden');
+        var id = $(this).attr("data-id");
+        if(id != undefined){
+            make_Item_charts(id);
+        }
+       
+    });
 });
 
 var getUrlParameter = function getUrlParameter(sParam) {
@@ -876,163 +405,267 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
+//////// Bar and Pie chart Functions is defined//////
 var Chart = {
-    initAmChart1: function(summaryStats) {
-    if (typeof(AmCharts) === 'undefined' || $('#dashboard_amchart_1').size() === 0) {
-        return;
-    }
-    var totals = getSummaryTotals(summaryStats);
-    var chartData = [{
-        "status": "Email<br>Sent",
-        "numbers": totals['sent'],
-        "townSize": 7,
-        "activityPercent": Number((totals['sent']/totals['sent'])*100).toFixed(2),
-    }, {
-        "status": "Error<br>Sending",
-        "numbers": totals['error_sending'],
-        "NotActivityPercent": Number((totals['error_sending']/totals['sent'])*100).toFixed(2)
-    }, {
-        "status": "Emails<br>Opened",
-        "numbers": totals['opened'],
-        "townSize": 16,
-        "activityPercent": Number((totals['opened']/totals['sent'])*100).toFixed(2),
-    }, {
-        "status": "Unopened",
-        "numbers": totals['sent'] - totals['opened'],
-        "NotActivityPercent": Number(((totals['sent'] - totals['opened'])/totals['sent'])*100).toFixed(2)
-    }, {
-        "status": "Links<br>Clicked",
-        "numbers": totals['clicked'],
-        "townSize": 11,
-        "activityPercent": Number((totals['clicked']/totals['sent'])*100).toFixed(2),
-    }, {
-        "status": "Didn't<br>Click",
-        "numbers":  totals['sent'] - totals['clicked'],
-        "NotActivityPercent": Number(((totals['sent'] - totals['clicked'])/totals['sent'])*100).toFixed(2)
-    }, {
-        "status": "Credentials<br>Entered",
-        "numbers": totals['unique-credentials'],
-        "townSize": 18,
-        "activityPercent": Number((totals['unique-credentials']/totals['sent'])*100).toFixed(2),
-        "townName": "Credentials Entered",
-        "townName2": "Credentials Entered",
-        "bulletClass": "lastBullet"
-    }, {
-        "status": "No<br>Credentials",
-        "numbers": totals['sent'] -  totals['unique-credentials'],
-        "NotActivityPercent": Number(((totals['sent'] - totals['unique-credentials'])/totals['sent'])*100).toFixed(2),
-        "alpha": 0.4,
-        
-    }, {
-        "status": " "
-    }];
-    var chart = AmCharts.makeChart("dashboard_amchart_1", {
-        type: "serial",
-        fontSize: 12,
-        fontFamily: "Open Sans",
-        dataDateFormat: "YYYY-MM-DD",
-        dataProvider: chartData,
+    initItemBarchart:function(params){
+        var chartData = [{
+            "status": "Email<br>Sent",
+            "numbers": params[1],
+            "townSize": 7,
+            "activityPercent": 100,
+        }, {
+            "status": "Error<br>Sending",
+            "numbers": params[2],
+            "NotActivityPercent": Number((params[2]/params[1])*100).toFixed(2)
+        }, {
+            "status": "Emails<br>Opened",
+            "numbers": params[3],
+            "townSize": 16,
+            "activityPercent": Number((params[3]/params[1])*100).toFixed(2),
+        }, {
+            "status": "Unopened",
+            "numbers": params[1] - params[3],
+            "NotActivityPercent": Number(((params[1] - params[3])/params[1])*100).toFixed(2)
+        }, {
+            "status": "Links<br>Clicked",
+            "numbers": params[4],
+            "townSize": 11,
+            "activityPercent": Number((params[4]/params[1])*100).toFixed(2),
+        }, {
+            "status": "Didn't<br>Click",
+            "numbers":  params[1] - params[4],
+            "NotActivityPercent": Number(((params[1] - params[4])/params[1])*100).toFixed(2)
+        }, {
+            "status": "Credentials<br>Entered",
+            "numbers": params[5],
+            "townSize": 18,
+            "activityPercent": Number((params[5]/params[1])*100).toFixed(2),
+            "townName": "Credentials Entered",
+            "townName2": "Credentials Entered",
+            "bulletClass": "lastBullet"
+        }, {
+            "status": "No<br>Credentials",
+            "numbers": params[1] - params[5],
+            "NotActivityPercent": Number(((params[1] - params[5])/params[1])*100).toFixed(2),
+            "alpha": 0.4,
+            
+        }, {
+            "status": " "
+        }];
+        var chart = AmCharts.makeChart(params[0], {
+            type: "serial",
+            fontSize: 12,
+            fontFamily: "Open Sans",
+            dataDateFormat: "YYYY-MM-DD",
+            dataProvider: chartData,
 
-        addClassNames: true,
-        startDuration: 1,
-        color: "#6c7b88",
-        marginLeft: 0,
+            addClassNames: true,
+            startDuration: 1,
+            color: "#6c7b88",
+            marginLeft: 0,
 
-        categoryField: "status",
-        categoryAxis: {
-            minPeriod: "DD",
-            autoGridCount: false,
-            gridCount: 50,
-            gridAlpha: 0.1,
-            gridColor: "#FFFFFF",
-            axisColor: "#555555",
-        },
-        valueAxes: [{
-            id: "a1",
-            title: "numbers",
-            gridAlpha: 0,
-            axisAlpha: 0
-        }, {
-            id: "a2",
-            position: "right",
-            gridAlpha: 0,
-            axisAlpha: 0,
-            labelsEnabled: false
-        }, {
-            id: "a3",
-            title: "NotActivityPercent",
-            position: "right",
-            gridAlpha: 0,
-            axisAlpha: 0,
-            inside: true,
-            NotActivityPercent: "%",
-        }],
-        graphs: [{
-            id: "g1",
-            valueField: "numbers",
-            title: "number",
-            type: "column",
-            fillAlphas: 0.7,
-            valueAxis: "a1",
-            balloonText: "[[value]]",
-            legendValueText: "[[value]]",
-            legendPeriodValueText: "total: [[value.sum]]",
-            lineColor: "#08a3cc",
-            alphaField: "alpha",
-        }, {
-            id: "g2",
-            valueField: "activityPercent",
-            classNameField: "bulletClass",
-            title: "activityPercent",
-            type: "line",
-            valueAxis: "a2",
-            lineColor: "#786c56",
-            lineThickness: 1,
-            legendValueText: "[[description]]/[[value]]",
-            bullet: "round",
-            bulletSizeField: "townSize",
-            bulletBorderColor: "#02617a",
-            bulletBorderAlpha: 1,
-            bulletBorderThickness: 2,
-            bulletColor: "#89c4f4",
-            labelText: "[[townName2]]",
-            labelPosition: "right",
-            balloonText: "activityPercent:[[value]]%",
-            showBalloon: true,
-            animationPlayed: true,
-        }, {
-            id: "g3",
-            title: "NotActivityPercent",
-            valueField: "NotActivityPercent",
-            type: "line",
-            valueAxis: "a3",
-            lineAlpha: 0.8,
-            lineColor: "#e26a6a",
-            balloonText: "[[value]]%",
-            lineThickness: 1,
-            legendValueText: "[[value]]",
-            bullet: "square",
-            bulletBorderColor: "#e26a6a",
-            bulletBorderThickness: 1,
-            bulletBorderAlpha: 0.8,
-            dashLengthField: "dashLength",
-            animationPlayed: true
-        }],
+            categoryField: "status",
+            categoryAxis: {
+                minPeriod: "DD",
+                autoGridCount: false,
+                gridCount: 50,
+                gridAlpha: 0.1,
+                gridColor: "#FFFFFF",
+                axisColor: "#555555",
+            },
+            valueAxes: [{
+                id: "a1",
+                title: "numbers",
+                gridAlpha: 0,
+                axisAlpha: 0
+            }, {
+                id: "a2",
+                position: "right",
+                gridAlpha: 0,
+                axisAlpha: 0,
+                labelsEnabled: false
+            }, {
+                id: "a3",
+                title: "NotActivityPercent",
+                position: "right",
+                gridAlpha: 0,
+                axisAlpha: 0,
+                inside: true,
+                NotActivityPercent: "%",
+            }],
+            graphs: [{
+                id: "g1",
+                valueField: "numbers",
+                title: "number",
+                type: "column",
+                fillAlphas: 0.7,
+                valueAxis: "a1",
+                balloonText: "[[value]]",
+                legendValueText: "[[value]]",
+                legendPeriodValueText: "total: [[value.sum]]",
+                lineColor: "#08a3cc",
+                alphaField: "alpha",
+            }, {
+                id: "g2",
+                valueField: "activityPercent",
+                classNameField: "bulletClass",
+                title: "activityPercent",
+                type: "line",
+                valueAxis: "a2",
+                lineColor: "#786c56",
+                lineThickness: 1,
+                legendValueText: "[[description]]/[[value]]",
+                bullet: "round",
+                bulletSizeField: "townSize",
+                bulletBorderColor: "#02617a",
+                bulletBorderAlpha: 1,
+                bulletBorderThickness: 2,
+                bulletColor: "#89c4f4",
+                labelText: "[[townName2]]",
+                labelPosition: "right",
+                balloonText: "activityPercent:[[value]]%",
+                showBalloon: true,
+                animationPlayed: true,
+            }, {
+                id: "g3",
+                title: "NotActivityPercent",
+                valueField: "NotActivityPercent",
+                type: "line",
+                valueAxis: "a3",
+                lineAlpha: 0.8,
+                lineColor: "#e26a6a",
+                balloonText: "[[value]]%",
+                lineThickness: 1,
+                legendValueText: "[[value]]",
+                bullet: "square",
+                bulletBorderColor: "#e26a6a",
+                bulletBorderThickness: 1,
+                bulletBorderAlpha: 0.8,
+                dashLengthField: "dashLength",
+                animationPlayed: true
+            }],
 
-        chartCursor: {
-            zoomable: false,
-            cursorAlpha: 0,
-            categoryBalloonColor: "#e26a6a",
-            categoryBalloonAlpha: 0.8,
-            valueBalloonsEnabled: false
-        },
-        legend: {
-            bulletType: "round",
-            equalWidths: false,
-            valueWidth: 120,
-            useGraphSettings: true,
-            color: "#6c7b88"
+            chartCursor: {
+                zoomable: false,
+                cursorAlpha: 0,
+                categoryBalloonColor: "#e26a6a",
+                categoryBalloonAlpha: 0.8,
+                valueBalloonsEnabled: false
+            },
+            legend: {
+                bulletType: "round",
+                equalWidths: false,
+                valueWidth: 120,
+                useGraphSettings: true,
+                color: "#6c7b88"
+            }
+        });
+        chart.addListener("rendered", addListeners);
+
+        function addListeners() {
+          var categoryAxis = chart.categoryAxis;
+          categoryAxis.addListener("clickItem", handleClick);
+          categoryAxis.addListener("rollOverItem", handleOver);
+          categoryAxis.addListener("rollOutItem", handleOut);
         }
-    });
+
+        function handleClick(event) {
+          alert("click");
+          console.log(event);
+        }
+
+        function handleOut(event) {
+          event.target.setAttr("cursor", "default");
+          event.target.setAttr("fill", "#000000");
+          console.log("out");
+          console.log(event);
+        }
+
+        function handleOver(event) {
+          event.target.setAttr("cursor", "pointer");
+          event.target.setAttr("fill", "#CC0000");
+          console.log("over");
+          console.log(event);
+        }
+    },
+    initItemPiechart:function(params){ //status, id, total, success-params,
+      switch(params[0]) {
+        case "opened":
+          var success_status = " Email Opened";
+          var other_status ="Unopened";
+          var unsuccess_count = params[2]-params[3];;
+          var success_count = params[3];
+          break;
+        case "clicked":
+          success_status = "Links Clicked";
+          other_status = "Didn't Clicked";
+          var unsuccess_count = params[2]-params[3];
+          success_count = params[3];
+          break;
+        case "unique-credentials":
+          success_status = "Credentials Entered";
+          other_status ="NO credentials";
+          var unsuccess_count = params[2]-params[3];
+          success_count = params[3];
+          break;
+        default:
+          success_status = "Email Sent";
+          other_status ="Error Sending";
+          unsuccess_count = params[3];
+          success_count = params[2];
+      }
+      
+      var chart = AmCharts.makeChart(params[1], {
+        "type": "pie",
+        "startDuration": 0,
+        "theme": "light",
+        "addClassNames": true,
+        "legend":{
+          "position":"right",
+          "align":"right",
+          "autoMargins":false
+        },
+        "innerRadius": "50%",
+        "defs": {
+          "filter": [{
+            "id": "shadow",
+            "width": "200%",
+            "height": "200%",
+            "feOffset": {
+              "result": "offOut",
+              "in": "SourceAlpha",
+              "dx": 0,
+              "dy": 0
+            },
+            "feGaussianBlur": {
+              "result": "blurOut",
+              "in": "offOut",
+              "stdDeviation": 5
+            },
+            "feBlend": {
+              "in": "SourceGraphic",
+              "in2": "blurOut",
+              "mode": "normal"
+            }
+          }]
+        },
+        "dataProvider": [{
+          "status": success_status,
+          "litres": success_count,
+          "color": "#fdd400"
+        }, {
+          "status": other_status,
+          "litres": unsuccess_count,//total - sucessstatus
+          "color": "#67b7dc"
+        }],
+        "valueField": "litres",
+        "titleField": "status",
+        "colorField": "color",
+        "labelsEnabled": false,
+        "export": {
+          "enabled": true
+      }
+      });  
     }
-}        
+}

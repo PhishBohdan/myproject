@@ -96,6 +96,9 @@ function edit(idx) {
     })
     var profile = {}
     if (idx != -1) {
+        $('ul.nav-tabs li:nth-child(2)').addClass("active");
+        $('div#tab_0').removeClass("active");
+        $('div#tab_1').addClass("active");
         profile = profiles[idx]
         $("#name").val(profile.name)
         $("#interface_type").val(profile.interface_type)
@@ -108,6 +111,10 @@ function edit(idx) {
 }
 
 function copy(idx) {
+    $('ul.nav-tabs li:first-child').removeClass("active");
+        $('ul.nav-tabs li:nth-child(2)').addClass("active");
+        $('div#tab_0').removeClass("active");
+        $('div#tab_1').addClass("active");
     $("#modalSubmit").unbind('click').click(function() {
         save(-1)
     })
@@ -145,13 +152,13 @@ function load() {
                         escapeHtml(profile.name),
                         profile.interface_type,
                         moment(profile.modified_date).format('MMMM Do YYYY, h:mm:ss a'),
-                        "<div class='pull-right'><span data-toggle='modal' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Edit Profile' onclick='edit(" + i + ")'>\
+                        "<div class='text-center'><button class='btn btn-outline purple btn-sm' data-toggle='tooltip' data-placement='left' title='Edit Profile' onclick='edit(" + i + ")'>\
                     <i class='fa fa-pencil'></i>\
-                    </button></span>\
-		    <span data-toggle='modal' data-target='#modal'><button class='btn btn-primary' data-toggle='tooltip' data-placement='left' title='Copy Profile' onclick='copy(" + i + ")'>\
+                    </button>\
+		   <button class='btn btn-outline blue btn-sm' data-toggle='tooltip' data-placement='left' title='Copy Profile' onclick='copy(" + i + ")'>\
                     <i class='fa fa-copy'></i>\
-                    </button></span>\
-                    <button class='btn btn-danger' data-toggle='tooltip' data-placement='left' title='Delete Profile' onclick='deleteProfile(" + i + ")'>\
+                    </button>\
+                    <button class='btn btn-outline red btn-sm' data-toggle='tooltip' data-placement='left' title='Delete Profile' onclick='deleteProfile(" + i + ")'>\
                     <i class='fa fa-trash-o'></i>\
                     </button></div>"
                     ]).draw()

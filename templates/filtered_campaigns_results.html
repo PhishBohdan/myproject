@@ -162,6 +162,9 @@
                         <span>Phising Results</span>
                     </li>
                 </ul>
+                <div class="actions pull-right">
+                    <a class="btn btn-default btn-sm goback"><i class="fa fa-arrow-circle-o-left fa-lg"></i> Back</a>
+                </div>
             </div>
             <div class="main">  
                 <div id="campaign-results">
@@ -171,172 +174,185 @@
                     <div class="row">
                         <div class="col-md-12" style="display:none;" id="campaign-results-body">
                             <div class="tabbable-line boxless tabbable-reversed">
-                                <ul class="nav nav-tabs">
+                                <ul class="nav nav-tabs"    >
                                     <li class="active">
-                                        <a href="#tab_0" data-toggle="tab"> Phishings</a>
+                                        <a href="#tab_0" data-toggle="tab"> Campaigns</a>
                                     </li>
                                     <li>
-                                        <a href="#tab_1" data-toggle="tab"> More Information</a>
+                                        <a href="#tab_1" class="phish_more" data-toggle="tab"> More Information</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane " id="tab_1">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                                <div class="dashboard-stat2 ">
-                                                    <div class="display">
-                                                        <div class="number">
-                                                            <h3 class="font-green-sharp">
-                                                                <span id="email_sent_value">0</span>
-                                                            </h3>
-                                                            <small>Email Sent</small>
-                                                        </div>
-                                                        <!-- <div class="icon">
-                                                            <i class="icon-pie-chart"></i>
-                                                        </div> -->
-                                                    </div>
-                                                    <div class="progress-info">
-                                                        <div class="progress">
-                                                            <span style="width: 76%;" id="email_sent_bar" class="progress-bar progress-bar-success green-sharp">
-                                                                <span class="sr-only">76% progress</span>
-                                                            </span>
-                                                        </div>
-                                                        <div class="status">
-                                                            <div class="status-title"> percentage </div>
-                                                            <div class="status-number email_sent_per"> 76% </div>
+                                        <div class="portlet mt-element-ribbon light portlet-fit bordered" id="total_detail">
+                                            <div class="ribbon ribbon-right ribbon-clip ribbon-shadow ribbon-border-dash-hor ribbon-color-success uppercase">
+                                                <div class="ribbon-sub ribbon-clip ribbon-right"></div> Portlet Ribbon </div>
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class=" icon-layers font-green"></i>
+                                                            <span class="caption-subject font-green bold campaign_name">Totals</span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                                <div class="dashboard-stat2 ">
-                                                    <div class="display">
-                                                        <div class="number">
-                                                            <h3 class="font-red-haze">
-                                                                <span id="email_open_value">0</span>
-                                                            </h3>
-                                                            <small>Email Opened</small>
-                                                        </div>
-                                                        <!-- <div class="icon">
-                                                            <i class="icon-like"></i>
-                                                        </div> -->
-                                                    </div>
-                                                    <div class="progress-info">
-                                                        <div class="progress">
-                                                            <span style="width: 85%;" id="email_open_bar" class="progress-bar progress-bar-success red-haze">
-                                                                <span class="sr-only">85% change</span>
-                                                            </span>
-                                                        </div>
-                                                        <div class="status">
-                                                            <div class="status-title"> percentage </div>
-                                                            <div class="status-number email_open_per"> 85% </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                                <div class="dashboard-stat2 ">
-                                                    <div class="display">
-                                                        <div class="number">
-                                                            <h3 class="font-blue-sharp">
-                                                                <span id="email_click_value" >0</span>
-                                                            </h3>
-                                                            <small>Email Clicked</small>
-                                                        </div>
-                                                        <!-- <div class="icon">
-                                                            <i class="icon-basket"></i>
-                                                        </div> -->
-                                                    </div>
-                                                    <div class="progress-info">
-                                                        <div class="progress">
-                                                            <span style="width: 45%;" id="email_click_bar" class="progress-bar progress-bar-success blue-sharp">
-                                                                <span class="sr-only">45% grow</span>
-                                                            </span>
-                                                        </div>
-                                                        <div class="status">
-                                                            <div class="status-title"> percentage </div>
-                                                            <div class="status-number email_click_per"> 45% </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                                <div class="dashboard-stat2 ">
-                                                    <div class="display">
-                                                        <div class="number">
-                                                            <h3 class="font-purple-soft">
-                                                                <span id="email_credential_value">0</span>
-                                                            </h3>
-                                                            <small>Credentials Entered</small>
-                                                        </div>
-                                                        <!-- <div class="icon">
-                                                            <i class="icon-user"></i>
-                                                        </div> -->
-                                                    </div>
-                                                    <div class="progress-info">
-                                                        <div class="progress">
-                                                            <span style="width: 57%;" id="email_credential_bar" class="progress-bar progress-bar-success purple-soft">
-                                                                <span class="sr-only">56% change</span>
-                                                            </span>
-                                                        </div>
-                                                        <div class="status">
-                                                            <div class="status-title"> percentage </div>
-                                                            <div class="status-number email_credential_per"> 57% </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="portlet light portlet-fit bordered">
-                                                <div class="portlet-title">
-                                                    <div class="caption">
-                                                        <i class="fa fa-gift"></i>Detail Chart </div>
+                                                    <div class="portlet-body">
+                                                        <div class="item_campaign" >
                                                     
-                                                    <div class="tools">
-                                                        <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
-                                                        <a href="" class="fullscreen" data-original-title="" title=""> </a>
-                                                        <a href="javascript:;" class="reload" data-original-title="" title=""> </a>
-                                                    </div>
-                                                    <ul class="nav nav-tabs">
-                                                        <li>
-                                                            <a href="#portlet_tab_2" data-toggle="tab"> Pie Chart </a>
-                                                        </li>
-                                                        <li class="active">
-                                                            <a href="#portlet_tab_1" data-toggle="tab"> Bar Chart </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="portlet-body">
-                                                    <div class="tab-content">
-                                                        <div class="tab-pane active" id="portlet_tab_1">
-                                                             <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
-                                                                <div id="dashboard_amchart_1" class="CSSAnimationChart"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="tab-pane" id="portlet_tab_2">
-                                                            <div class="col-md-6">
-                                                                <div id="sentpiechart" style="width: 100%; height: 350px;"></div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div id="openpiechart" style="width: 100%; height: 350px;"></div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div id="clickpiechart" style="width: 100%; height: 350px;"></div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div id="credentialpiechart" style="width: 100%; height: 350px;"></div>
-                                                            </div>
+                                                    <div class="phishingbox">
 
-                                                            <div class="clearfix"></div>
+                                                        <div class="phishingbox-title">
+                                                            <div class="row">
+                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                                    <div class="dashboard-stat2 ">
+                                                                        <div class="display">
+                                                                            <div class="number">
+                                                                                <h3 class="font-green-sharp">
+                                                                                    <span id="email_sent_value">0</span>
+                                                                                </h3>
+                                                                                <small>Email Sent</small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="progress-info">
+                                                                            <div class="progress">
+                                                                                <span style="width: 76%;" id="email_sent_bar" class="progress-bar progress-bar-success green-sharp">
+                                                                                    <span class="sr-only">76% progress</span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="status">
+                                                                                <div class="status-title"> percentage </div>
+                                                                                <div class="status-number email_sent_per"> 76% </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                                    <div class="dashboard-stat2 ">
+                                                                        <div class="display">
+                                                                            <div class="number">
+                                                                                <h3 class="font-red-haze">
+                                                                                    <span id="email_open_value">0</span>
+                                                                                </h3>
+                                                                                <small>Email Opened</small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="progress-info">
+                                                                            <div class="progress">
+                                                                                <span style="width: 85%;" id="email_open_bar" class="progress-bar progress-bar-success red-haze">
+                                                                                    <span class="sr-only">85% change</span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="status">
+                                                                                <div class="status-title"> percentage </div>
+                                                                                <div class="status-number email_open_per"> 85% </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                                    <div class="dashboard-stat2 ">
+                                                                        <div class="display">
+                                                                            <div class="number">
+                                                                                <h3 class="font-blue-sharp">
+                                                                                    <span id="email_click_value" >0</span>
+                                                                                </h3>
+                                                                                <small>Email Clicked</small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="progress-info">
+                                                                            <div class="progress">
+                                                                                <span style="width: 45%;" id="email_click_bar" class="progress-bar progress-bar-success blue-sharp">
+                                                                                    <span class="sr-only">45% grow</span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="status">
+                                                                                <div class="status-title"> percentage </div>
+                                                                                <div class="status-number email_click_per"> 45% </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                                    <div class="dashboard-stat2 ">
+                                                                        <div class="display">
+                                                                            <div class="number">
+                                                                                <h3 class="font-purple-soft">
+                                                                                    <span id="email_credential_value">0</span>
+                                                                                </h3>
+                                                                                <small>Credentials Entered</small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="progress-info">
+                                                                            <div class="progress">
+                                                                                <span style="width: 57%;" id="email_credential_bar" class="progress-bar progress-bar-success purple-soft">
+                                                                                    <span class="sr-only">56% change</span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="status">
+                                                                                <div class="status-title"> percentage </div>
+                                                                                <div class="status-number email_credential_per"> 57% </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    <div class="phishingbox-body">
+                                                        <div class="chartsection">
+                                                            <div class="accordion">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading bg-white">
+                                                                        <div class="panel-title">
+                                                                            <a class="accordion-toggle font-purple "  aria-expanded="false"><i class="icon-settings "></i> Detail Chart </a>
+                                                                            <ul class="nav nav-tabs accordion_tabs  pull-right ">
+                                                                                <li class="active">
+                                                                                    <a href="#portlet_tab_2" data-toggle="tab"> Pie Chart </a>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <a href="#portlet_tab_1" data-toggle="tab"> Bar Chart </a>
+                                                                                </li>
+                                                                            </ul>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="chartpanel panel-callapse hidden" aria-expanded="false">
+                                                                        <div class="panel-body">
+                                                                            <div class="tab-content">
+                                                                                <div class="tab-pane " id="portlet_tab_1">
+                                                                                     <div class="col-lg-10 col-lg-offset-1 col-md-12 col-sm-12 col-xs-12">
+                                                                                        <div id="dashboard_amchart_1" class="CSSAnimationChart"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="tab-pane active" id="portlet_tab_2">
+                                                                                    <div class="col-md-6">
+                                                                                        <div id="sentpiechart" style="width: 100%; height: 350px;"></div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div id="openpiechart" style="width: 100%; height: 350px;"></div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div id="clickpiechart" style="width: 100%; height: 350px;"></div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <div id="credentialpiechart" style="width: 100%; height: 350px;"></div>
+                                                                                    </div>
+
+                                                                                    <div class="clearfix"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
                                                 </div>
-                                                <div class="clearfix"></div>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class="tab-pane active" id="tab_0">
+                                        <div class="clearfix"></div>
                                         <div class="portlet  light bordered">
                                             <div class="portlet-title">
                                                 <div class="caption">
@@ -421,8 +437,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -432,67 +446,6 @@
                         <i class="fa fa-spinner fa-spin fa-4x"></i>
                     </div>
                     <div >
-                        <br />
-                        
-                       
-                        <!--<div id="summary-table">
-                            <ul class="two-column">
-                                <li class="two-column">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                            <p style="text-align:center;">Emails Sent</p>
-                                            <div id="email_sent_chart" class="col-lg-7 col-md-7"></div>
-                                            <div class="col-lg-5 col-md-5">
-                                                <ul id="email_sent_chart_legend" class="chartist-legend">
-                                                </ul>
-                                            </div>
-                                    </div>
-                                </li>
-                                <li class="two-column">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <p style="text-align:center;">Emails Opened</p>
-                                        <div id="email_chart" class="col-lg-7 col-md-7"></div>
-                                        <div class="col-lg-5 col-md-5">
-                                            <ul id="email_chart_legend" class="chartist-legend">
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="two-column">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <p style="text-align:center;">Links Clicked</p>
-                                        <div id="email_clicked_chart" class="col-lg-7 col-md-7"></div>
-                                        <div class="col-lg-5 col-md-5">
-                                            <ul id="email_clicked_chart_legend" class="chartist-legend">
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="two-column">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                        <p style="text-align:center;">Credentials Entered</p>
-                                        <div id="email_creds_chart" class="col-lg-7 col-md-7"></div>
-                                        <div class="col-lg-5 col-md-5">
-                                            <ul id="email_creds_chart_legend" class="chartist-legend">
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <table >
-                                <tr>
-                                    <td style="padding: 3px;">Emails Sent</td> <td align="right" style="padding: 3px;"><span id="emails-sent"></span></td>
-                                    <td style="padding: 3px;">Emails Opened</td><td align="right" style="padding: 3px;"><span id="emails-opened"></span></td>
-                                </tr>
-                                <tr >
-                                    <td style="padding: 3px;">Emails Clicked</td><td align="right" style="padding: 3px;"><span id="emails-clicked"></span></td>
-                                    <td style="padding: 3px;">Credentials Entered</td><td align="right" style="padding: 3px;"><span id="emails-unique"></span></td>
-                                </tr>
-                            </table>
-                        </div> -->
-                        
                     </div>
                 </div>
                 <div id="flashes" class="row"></div>
