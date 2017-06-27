@@ -98,41 +98,46 @@ function init_campaigns(summaryStats) {
     init_campaigns_percent("total_detail","Totals", sent, error_sending, opened, clicked, uniqueCredentials,"Totals");
 
 }
-function make_Item_charts(id) {
+function make_Item_charts(id,filterUrls) {
     var chart_id = "filtered_barchart"+id;"filtered_barchart"+id;
     var campaign = Campaign_array[parseInt(id)];
-    console.log(campaign);
+    console.log('here' ,filterUrls);
     var chartData = [
         chart_id,
         campaign.sent,
         campaign.error_sending,
         campaign.opened,
         campaign.clicked,
-        campaign.uniquecredentialsentered
+        campaign.uniquecredentialsentered,
+        filterUrls
     ];
     var sentData = [
       "sent",
       "sentpiechart_flitered_"+id,
       campaign.sent,
-      campaign.error_sending
+      campaign.error_sending,
+      filterUrls
     ];
     var openedData = [
       "opened",
       "openpiechart_flitered_"+id,
       campaign.sent,
-      campaign.opened
+      campaign.opened,
+      filterUrls
     ];
     var clickedData = [
       "clicked",
       "clickpiechart_flitered_"+id,
       campaign.sent,
-      campaign.clicked
+      campaign.clicked,
+      filterUrls
     ];
     var credetialData = [
       "unique-credentials",
       "credentialpiechart_flitered_"+id,
       campaign.sent,
-      campaign.uniquecredentialsentered
+      campaign.uniquecredentialsentered,
+      filterUrls
     ]
     Chart.initItemBarchart(chartData);
     Chart.initItemPiechart(sentData);
@@ -146,6 +151,22 @@ function percent(frac) {
     return Math.floor(frac * 400)/4;
 }
 function init_campaigns_percent(id,name, sent, error_sending, opened, clicked, uniquecredentialsentered, status){
+    if(name=="Totals"){
+        var campaignName = '' ;
+    }else{
+        campaignName = name;
+    }
+    var href = "/filterresults?filter="+campaignName+""
+    var sentStatuses = href+"&statuses=Email+Sent";
+    var openedStatuses = href+"&statuses=Email+Opened";
+    var clickedStatuses = href+"&statuses=Clicked+Link";
+    var submittedDataStatuses = href+"&statuses=Submitted+Data";
+
+
+    var labelClass = "success";
+    if (status == "Completed"){
+        labelClass ="danger"
+    }
     var labelClass = "success";
     if (status == "Completed"){
         labelClass ="danger"
@@ -154,6 +175,12 @@ function init_campaigns_percent(id,name, sent, error_sending, opened, clicked, u
     var opened_percent= percent(parseInt(opened)/parseInt(sent))+"%";
     var clicked_percent= percent(parseInt(clicked)/parseInt(sent))+"%";
     var credential_percent= percent(parseInt(uniquecredentialsentered)/parseInt(sent))+"%";
+
+    $("#"+id+" a[data-id='email-sent']").attr("href",sentStatuses);
+    $("#"+id+" a[data-id='email-opened']").attr("href",openedStatuses);
+    $("#"+id+" a[data-id='email-click']").attr("href",clickedStatuses);
+    $("#"+id+" a[data-id='email-entered']").attr("href",submittedDataStatuses);
+
     $("#"+id+" span.campaign_name").html(name);
     $("#"+id+" .ribbon-shadow").text(status);
     $("#"+id+" #emails-opened").html(opened);
@@ -175,47 +202,60 @@ function init_campaigns_percent(id,name, sent, error_sending, opened, clicked, u
 function updateSummaryStats(summaryStats) {
     var totals = getSummaryTotals(summaryStats);
     init_campaigns(summaryStats);
-    var filter = encodeURIComponent(getFilter());
-    var ahref = "<a class='btn btn-primary' href='/filterresults?filter=";
-    var sentStatuses = "&statuses=Email+Sent&statuses=Email+Opened&statuses=Clicked+Link&statuses=Submitted+Data";
-    var openedStatuses = "&statuses=Email+Opened&statuses=Clicked+Link&statuses=Submitted+Data";
-    var clickedStatuses = "&statuses=Clicked+Link&statuses=Submitted+Data";
-    var submittedDataStatuses = "&statuses=Submitted+Data";
-    var linkSent = ahref + filter + sentStatuses + "'>" + totals['sent'] + " (" +percent(totals['sent']/parseInt(totals['sent']))+ "%)"+'</a>';
-    var linkOpened = ahref + filter + openedStatuses + "'>" + totals['opened'] + " (" +percent(parseInt(totals['opened'])/parseInt(totals['sent']))+ "%)" + '</a>';
-    var linkClicked = ahref + filter + clickedStatuses + "'>" + totals['clicked'] + " (" +percent(parseInt(totals['clicked'])/parseInt(totals['sent']))+ "%)" + '</a>';
-    var linkUniqueCredentials = ahref + filter + submittedDataStatuses + "'>" + totals['unique-credentials'] + " (" +percent(parseInt(totals['unique-credentials'])/parseInt(totals['sent']))+ "%)" + '</a>';
+    // var filter = encodeURIComponent(getFilter());
+    // var ahref = "<a class='btn btn-primary' href='/filterresults?filter=";
+    // var sentStatuses = "&statuses=Email+Sent&statuses=Email+Opened&statuses=Clicked+Link&statuses=Submitted+Data";
+    // var openedStatuses = "&statuses=Email+Opened&statuses=Clicked+Link&statuses=Submitted+Data";
+    // var clickedStatuses = "&statuses=Clicked+Link&statuses=Submitted+Data";
+    // var submittedDataStatuses = "&statuses=Submitted+Data";
+    // var linkSent = ahref + filter + sentStatuses + "'>" + totals['sent'] + " (" +percent(totals['sent']/parseInt(totals['sent']))+ "%)"+'</a>';
+    // var linkOpened = ahref + filter + openedStatuses + "'>" + totals['opened'] + " (" +percent(parseInt(totals['opened'])/parseInt(totals['sent']))+ "%)" + '</a>';
+    // var linkClicked = ahref + filter + clickedStatuses + "'>" + totals['clicked'] + " (" +percent(parseInt(totals['clicked'])/parseInt(totals['sent']))+ "%)" + '</a>';
+    // var linkUniqueCredentials = ahref + filter + submittedDataStatuses + "'>" + totals['unique-credentials'] + " (" +percent(parseInt(totals['unique-credentials'])/parseInt(totals['sent']))+ "%)" + '</a>';
+    // $('body').append(linkSent);
+    
+    var href = "/filterresults?filter="
+    var sentStatuses = href+"&statuses=Email+Sent";
+    var openedStatuses = href+"&statuses=Email+Opened";
+    var clickedStatuses = href+"&statuses=Clicked+Link";
+    var submittedDataStatuses = href+"&statuses=Submitted+Data";
+    var filterUrls = [sentStatuses,openedStatuses,clickedStatuses,submittedDataStatuses];
     var chartData = [
         "dashboard_amchart_1",
         totals['sent'],
         totals['error_sending'],
         totals['opened'],
         totals['clicked'],
-        totals['unique-credentials'] 
+        totals['unique-credentials'] ,
+        filterUrls
     ];
     var sentData = [
       "sent",
       "sentpiechart",
       totals['sent'],
-      totals['error_sending']
+      totals['error_sending'],
+      filterUrls
     ];
     var openedData = [
       "opened",
       "openpiechart",
       totals['sent'],
-      totals['opened']
+      totals['opened'],
+      filterUrls
     ];
     var clickedData = [
       "clicked",
       "clickpiechart",
       totals['sent'],
-      totals["clicked"]
+      totals["clicked"],
+      filterUrls
     ];
     var credetialData = [
       "unique-credentials",
       "credentialpiechart",
       totals['sent'],
-      totals['unique-credentials']
+      totals['unique-credentials'],
+      filterUrls
     ]
     Chart.initItemBarchart(chartData);
     Chart.initItemPiechart(sentData);
@@ -382,8 +422,22 @@ $(document).ready(function() {
     $(document).on('click', ".accordion-toggle", function () {
         $(this).parents('.panel-heading').siblings('.chartpanel').toggleClass('hidden');
         var id = $(this).attr("data-id");
+        var name = $(this).parents('.portlet').find('.campaign_name').text();
         if(id != undefined){
-            make_Item_charts(id);
+            
+            if(name=="Totals"){
+                var campaignName = '' ;
+            }else{
+                campaignName = name;
+            }
+            var href = "/filterresults?filter="+campaignName+""
+            var sentStatuses = href+"&statuses=Email+Sent";
+            var openedStatuses = href+"&statuses=Email+Opened";
+            var clickedStatuses = href+"&statuses=Clicked+Link";
+            var submittedDataStatuses = href+"&statuses=Submitted+Data";
+            var filterUrls = [sentStatuses,openedStatuses,clickedStatuses,submittedDataStatuses];
+            console.log(filterUrls);
+            make_Item_charts(id,filterUrls);
         }
        
     });
@@ -473,6 +527,22 @@ var Chart = {
                 gridAlpha: 0.1,
                 gridColor: "#FFFFFF",
                 axisColor: "#555555",
+                listeners: [{
+                  event: "clickItem",
+                  method: function(e) {
+                    var status = e.value;
+                    status = status.replace('\n', ' ');
+                    if (status == "Email Sent" || status == "Error Sending"){
+                        location.href = params[6][0];
+                    }else if(status == "Emails Opened" || status == "Unopened"){
+                        location.href = params[6][1];
+                    }else if(status == "Links Clicked" || status == "Didn't Click"){
+                        location.href = params[6][2];
+                    }else{
+                        location.href = params[6][3];
+                    }
+                  }
+                }]
             },
             valueAxes: [{
                 id: "a1",
@@ -561,35 +631,9 @@ var Chart = {
                 color: "#6c7b88"
             }
         });
-        chart.addListener("rendered", addListeners);
-
-        function addListeners() {
-          var categoryAxis = chart.categoryAxis;
-          categoryAxis.addListener("clickItem", handleClick);
-          categoryAxis.addListener("rollOverItem", handleOver);
-          categoryAxis.addListener("rollOutItem", handleOut);
-        }
-
-        function handleClick(event) {
-          alert("click");
-          console.log(event);
-        }
-
-        function handleOut(event) {
-          event.target.setAttr("cursor", "default");
-          event.target.setAttr("fill", "#000000");
-          console.log("out");
-          console.log(event);
-        }
-
-        function handleOver(event) {
-          event.target.setAttr("cursor", "pointer");
-          event.target.setAttr("fill", "#CC0000");
-          console.log("over");
-          console.log(event);
-        }
     },
-    initItemPiechart:function(params){ //status, id, total, success-params,
+    initItemPiechart:function(params){ //status, id, total, success-params,filterUrls
+      console.log(params[4])
       switch(params[0]) {
         case "opened":
           var success_status = " Email Opened";
@@ -616,7 +660,7 @@ var Chart = {
           success_count = params[2];
       }
       
-      var chart = AmCharts.makeChart(params[1], {
+    var chart = AmCharts.makeChart(params[1], {
         "type": "pie",
         "startDuration": 0,
         "theme": "light",
@@ -659,13 +703,32 @@ var Chart = {
           "litres": unsuccess_count,//total - sucessstatus
           "color": "#67b7dc"
         }],
+        "listeners": [{
+            "event": "clickSlice",
+            "method": addClicks
+        }],
         "valueField": "litres",
         "titleField": "status",
         "colorField": "color",
         "labelsEnabled": false,
         "export": {
           "enabled": true
-      }
-      });  
+        }
+      });
+
+        function addClicks(e){
+            var status = e.dataItem.dataContext.status;
+            if (status === "Email Sent" || status === "Error Sending" ) {
+               location.href = params[4][0];
+            } else if (status === "Unopened" || status === " Email Opened") {
+                location.href = params[4][1]
+            } else if (status === "Didn't Clicked" || status === "Links Clicked") {
+                location.href = params[4][2]
+            } else {
+                location.href = params[4][3]
+            }
+        }
+
     }
+
 }

@@ -175,22 +175,46 @@
                         <div class="row">
                             <h1 class="page-title" id="page-title">Phishing Results</h1>
                         </div>
-                        <form name="filterform" id="filterform" action="/filterresults" method="GET">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <label class="control-label col-md-3" for="filter">Campaign(s):</label>
-                                    <input type="text" name="filter" id="filter" class="form-control col-md-9"></input>
-                                </div>
+                        <div class="portlet light row bordered ">
+                            <div class="portlet-title">
+                              <div class="caption">
+                                <i class="fa fa-star"></i> Search Campaign
+                              </div>
                             </div>
-                            <label for="statuses">Phishing Status:</label>
-                            <select id="statuses" class="form-control" name="statuses" multiple>
-                                 <option id="email-sent" name="email-sent" value="Email Sent">Sent</option>
-                                 <option id="email-opened" name="email-opened" value="Email Opened">Opened</option>
-                                 <option id="clicked-link" name="clicked-link" value="Clicked Link">Clicked Link</option>
-                                 <option id="submitted-data" name="submitted-data" value="Submitted Data">Submitted Credentials</option>
-                            </select>
-                            <a class="btn btn-primary" href="#" onclick="submitSearchForm()">Search</a>
-                        </form>
+                            <div class="portlet-body">
+                                <form name="filterform" id="filterform" action="/filterresults" method="GET">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="filter">Campaign(s):</label>
+                                                <div class="input-group col-md-9">
+                                                    <input type="text" name="filter" id="filter" class="form-control col-md-9"></input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="filter">Phishing Status:</label>
+                                                <div class="input-group col-md-9">
+                                                    <select id="statuses" class="form-control" name="statuses">
+                                                        <option id="email-sent" name="email-sent" value="Email Sent">Sent</option>
+                                                        <option id="email-opened" name="email-opened" value="Email Opened">Opened</option>
+                                                        <option id="clicked-link" name="clicked-link" value="Clicked Link">Clicked Link</option>
+                                                        <option id="submitted-data" name="submitted-data" value="Submitted Data">Submitted Credentials</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="actions pull-right">
+                                        <a class="btn btn-primary" href="#" onclick="submitSearchForm()">Search</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </form>
+                            </div>
+                        </div>
+                        
                         <br/>
                         <div id="loading">
                             <i class="fa fa-spinner fa-spin fa-4x"></i>
@@ -198,7 +222,7 @@
                         <div style="display:none;" id="results-body">
                             <div id="results-overflow"></div>
                             <div class="row">
-                                <table id="resultsTable" class="table">
+                                <table id="resultsTable" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th class="col-md-3">Campaign</th>

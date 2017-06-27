@@ -570,13 +570,7 @@ function load() {
 $(document).ready(function() {
     TimelineClass.init();
     load();
-    $(document).on('click', 'a.title' ,function(){
-        $('ul.nav-tabs li').removeClass('active');
-        $('div.tab-pane').removeClass('active');
-        $('ul.nav-tabs li:nth-child(2)').addClass('active');
-        $('div.tab-pane:nth-child(2)').addClass('active');
 
-    })
     // Start the polling loop
     // function refresh() {
     //     if (!doPoll) {
@@ -677,6 +671,14 @@ var PiechartClass = {
                         click_value = email_data['series'][i].value;
                     }
                 }
+                var templateName = c.name;
+                var href = "/filterresults?filter="+templateName+""
+                var sentStatuses = href+"&statuses=Email+Sent";
+                var openedStatuses = href+"&statuses=Email+Opened";
+                var clickedStatuses = href+"&statuses=Clicked+Link";
+                var submittedDataStatuses = href+"&statuses=Submitted+Data";
+                
+
                 var sucpercent = Number((success_value/chartData.length)*100).toFixed(1);
                 var opepercent = Number((open_value/chartData.length)*100).toFixed(1);
                 var senpercent = Number((sent_value/chartData.length)*100).toFixed(1);
@@ -685,6 +687,10 @@ var PiechartClass = {
                 $('.easy-pie-chart .number.sent span').html(senpercent+'%');
                 $('.easy-pie-chart .number.opened span').html(opepercent+'%');
                 $('.easy-pie-chart .number.clicked span').html(clicpercent+'%');
+                $('a[data-id="credential"').attr("href", submittedDataStatuses);
+                $('a[data-id="sent"').attr("href", sentStatuses);
+                $('a[data-id="opened"').attr("href", openedStatuses);
+                $('a[data-id="clicked"').attr("href", clickedStatuses);
                 $('span#success_msg').html(success_value);
                 $('span#open_msg').html(open_value);
                 $('span#click_msg').html(click_value);
