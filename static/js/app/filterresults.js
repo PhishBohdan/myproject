@@ -239,7 +239,7 @@ function populateResultsTable(results) {
         resultsTable.clear().draw();
         if (results.length > 2000) {
             results = results.slice(0, 2000);
-            $("#results-overflow").html("<b>First 2000 results shown</b>");
+            $("#results-overflow").html('<div class="note note-info" style="margin-left:-15px;" ><p style="font-size:16px;" class="block">First 2000 results shown</p></div>');
         }
         $.each(results, function(i, r) {
             if (r.status === "Submitted Data") {
