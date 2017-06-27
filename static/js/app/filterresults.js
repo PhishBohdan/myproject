@@ -247,7 +247,7 @@ function populateResultsTable(results) {
             }
             label = labels[r.status] || "label-default";
             campaignsahref = '/campaigns/';
-            var link = "<div class='pull-right'><a href='" + campaignsahref + r.campaignid + "'>" + escapeHtml(r.campaignname) + "</a>";
+            var link = "<div class=''><a href='" + campaignsahref + r.campaignid + "'>" + escapeHtml(r.campaignname) + "</a>";
             var status = "<span class=\"label " + label + "\">" + r.status + "</span>";
             var emailahref = '/target?email=' + encodeURI(r.email) + "&firstname=" + encodeURI(r.first_name) + "&lastname=" + encodeURI(r.last_name);
             var emaillink = "<a href='" + emailahref + "'>" + escapeHtml(r.email) + "</a>";
