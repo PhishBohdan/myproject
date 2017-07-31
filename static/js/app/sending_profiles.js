@@ -96,6 +96,7 @@ function edit(idx) {
     })
     var profile = {}
     if (idx != -1) {
+        $('ul.nav-tabs li:nth-child(1)').removeClass("active");
         $('ul.nav-tabs li:nth-child(2)').addClass("active");
         $('div#tab_0').removeClass("active");
         $('div#tab_1').addClass("active");
