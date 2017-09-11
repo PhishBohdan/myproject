@@ -80,7 +80,8 @@ function importSite() {
 
 function edit(idx) {
     $("#modalSubmit").unbind('click').click(function() {
-        save(idx)
+        save(idx);
+        showToAllTab();
     })
     $("#html_editor").ckeditor()
     var page = {}
@@ -164,7 +165,21 @@ function load() {
         })
 }
 
+function showToAllTab(){
+    $('#land_heads li:first-child').addClass('active');
+    $('#land_heads li:nth-child(2)').removeClass('active');
+    $('#tab_1').removeClass('active');
+    $('#tab_0').addClass('active');
+
+}
+
 $(document).ready(function() {
+    $('.lan_head_tab').click(function(){
+        dismiss();
+    })
+    $('#land_heads').click(function(){
+
+    })
     // Setup multiple modals
     // Code based on http://miles-by-motorcycle.com/static/bootstrap-modal/index.html
     $('.modal').on('hidden.bs.modal', function(event) {

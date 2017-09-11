@@ -186,12 +186,12 @@
                     </div>
                 </div>
                 <div class="tabbable-line boxless tabbable-reversed">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs" id="land_heads">
                         <li class="active">
-                            <a href="#tab_0" data-toggle="tab"> All pages </a>
+                            <a href="#tab_0" class="lan_head_tab" data-toggle="tab"> All pages </a>
                         </li>
                         <li>
-                            <a href="#tab_1" data-toggle="tab" onclick="edit(-1)"> New page </a>
+                            <a href="#tab_1" class="lan_head_tab"  data-toggle="tab" onclick="edit(-1)"> New page </a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -254,7 +254,8 @@
                                 </div>
                             </div>
                             <div class="actions">
-                                <button type="button" class="btn btn-primary" id="modalSubmit" onclick="importSite()">Import</button>
+                                <!-- <button type="button" data-dismiss="modal" class="btn btn-default" onclick="dismiss()">Cancel</button> -->
+                                <button type="button" class="btn btn-primary" id="modalSubmit">Save Page</button>
                             </div>
                         </div>
                     </div>
